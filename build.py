@@ -10,6 +10,8 @@ robot_dockerfiles = {
     "pepper-noetic": "pepper/Dockerfile.noetic",
     "abb_yumi-melodic": "abb_yumi/Dockerfile.melodic",
     "abb_yumi-noetic": "abb_yumi/Dockerfile.noetic",
+    "fetch-melodic": "fetch/Dockerfile.melodic",
+    "fetch-noetic": "fetch/Dockerfile.noetic",
 }
 
 def build_container(image_name: str, dockerfile: str):

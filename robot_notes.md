@@ -13,8 +13,10 @@
 
 ### Melodic
 - Abb yumi https://github.com/ros-industrial/abb_robot_driver
-- Fetch https://github.com/ZebraDevs/fetch_ros
 - Ridgeback https://github.com/ridgeback/ridgeback
+
+### Noetic
+- Fetch https://github.com/ZebraDevs/fetch_ros
 
 ### Noetic & Humble
 - Jackal https://github.com/jackal/jackal_robot Humble maybe?
