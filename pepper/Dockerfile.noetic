@@ -1,18 +1,15 @@
-FROM ros:kinetic
+FROM ros:noetic
 
 RUN apt-get update && apt-get install -y \
     git \
     python3-vcstool \
-    ros-${ROS_DISTRO}-control-msgs \
-    ros-${ROS_DISTRO}-cv-bridge \
     && rm -rf /var/lib/apt/lists/*
-# Note: rosdep fails to install control_msgs and cv_bridge on kinetic, so we install them manually here
 
 # Create and enter catkin workspace
 WORKDIR /ros_ws/src
 # Download source dependencies
-COPY ./baxter/kinetic.repos /
-RUN vcs import . < /kinetic.repos
+COPY ./pepper/noetic.repos /
+RUN vcs import . < /noetic.repos
 
 # Install dependencies using rosdep
 WORKDIR /ros_ws
@@ -21,4 +18,4 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
     && rm -rf /var/lib/apt/lists/*
 
-RUN catkin_make -DCMAKE_BUILD_TYPE=Release
+# RUN catkin_make -DCMAKE_BUILD_TYPE=Release

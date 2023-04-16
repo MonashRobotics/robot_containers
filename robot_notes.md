@@ -3,7 +3,13 @@
 ## Robots
 ### Kinetic
 - Baxter https://github.com/RethinkRobotics/baxter
+    - https://sdk.rethinkrobotics.com/wiki/Hello_Baxter
+    - https://github.com/CentraleNantesRobotics/baxter_common_ros2
 - Pepper https://github.com/ros-naoqi/pepper_robot
+    - http://wiki.ros.org/pepper/Tutorial_kinetic
+    - Melodic support? https://github.com/awesomebytes/pepper_os
+    - https://github.com/ros-naoqi/pepper_meshes2
+    - http://wiki.ros.org/pepper_dcm_bringup
 
 ### Melodic
 - Abb yumi https://github.com/ros-industrial/abb_robot_driver

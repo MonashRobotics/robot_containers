@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
+""" Script to make it easier to run containers from the images in this repo """
 import argparse
 import subprocess
-
-image_name = "humble-base"
 
 def attach_to_container(image_name: str):
     pass
@@ -18,10 +17,7 @@ def run_container(image_name: str):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        prog='Builder',
-        description='Builds docker images',
-        epilog='Text at the bottom of help')
+    parser = argparse.ArgumentParser(description='Runs docker containers')
     parser.add_argument('robot')
     args = parser.parse_args()
 

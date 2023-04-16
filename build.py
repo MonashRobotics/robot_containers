@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
+""" Script to make it easier to build images from the included Dockerfiles """
 import argparse
 import subprocess
-
-image_name = "humble-base"
-dockerfile = "Dockerfile.ros2"
 
 robot_dockerfiles = {
     "baxter-kinetic": "baxter/Dockerfile.kinetic",
     "baxter-noetic": "baxter/Dockerfile.noetic",
+    "pepper-kinetic": "pepper/Dockerfile.kinetic",
+    "pepper-noetic": "pepper/Dockerfile.noetic",
 }
-
 
 def build_container(image_name: str, dockerfile: str):
     subprocess.run(["docker", "build", ".", "-f", dockerfile, "-t", image_name])
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        prog='Builder',
-        description='Builds docker images',
-        epilog='Text at the bottom of help')
-    parser.add_argument('robot')
+    parser = argparse.ArgumentParser(description='Builds docker images')
+    parser.add_argument('robot', choices=robot_dockerfiles.keys())
     args = parser.parse_args()
 
     dockerfile = robot_dockerfiles[args.robot]
