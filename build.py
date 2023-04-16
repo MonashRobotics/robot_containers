@@ -8,6 +8,8 @@ robot_dockerfiles = {
     "baxter-noetic": "baxter/Dockerfile.noetic",
     "pepper-kinetic": "pepper/Dockerfile.kinetic",
     "pepper-noetic": "pepper/Dockerfile.noetic",
+    "abb_yumi-melodic": "abb_yumi/Dockerfile.melodic",
+    "abb_yumi-noetic": "abb_yumi/Dockerfile.noetic",
 }
 
 def build_container(image_name: str, dockerfile: str):
