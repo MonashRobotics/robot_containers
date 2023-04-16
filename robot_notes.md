@@ -1,10 +1,8 @@
 # Officially supported ROS versions
 
 ## Robots
-### Indigo
-- Baxter https://github.com/RethinkRobotics/baxter
-
 ### Kinetic
+- Baxter https://github.com/RethinkRobotics/baxter
 - Pepper https://github.com/ros-naoqi/pepper_robot
 
 ### Melodic

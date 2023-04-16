@@ -1,0 +1,21 @@
+FROM ros:noetic
+
+RUN apt-get update && apt-get install -y \
+    git \
+    python3-vcstool \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create and enter catkin workspace
+WORKDIR /ros_ws/src
+# Download baxter ROS software
+COPY ./baxter/noetic.repos /
+RUN vcs import . < /noetic.repos
+
+# Install dependencies using rosdep
+WORKDIR /ros_ws
+RUN apt-get update \
+    && rosdep update \
+    && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN catkin_make -DCMAKE_BUILD_TYPE=Release

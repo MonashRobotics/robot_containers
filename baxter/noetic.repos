@@ -1,0 +1,26 @@
+repositories:
+  baxter:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter.git
+    version: master
+  baxter_common:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter_common.git
+    version: master
+  baxter_examples:
+    type: git
+    url: https://github.com/cwru-eecs-275/baxter_examples.git
+    version: noetic_devel
+  baxter_interface:
+    type: git
+    url: https://github.com/k-okada/baxter_interface.git
+    version: development
+  baxter_tools:
+    type: git
+    url: https://github.com/cwru-eecs-275/baxter_tools.git
+    version: noetic_devel
+  # This could be included if simulation was needed, but it brings in a lot of dependencies
+  #baxter_simulator:
+  #  type: git
+  #  url: https://github.com/k-okada/baxter_simulator.git
+  #  version: fix_noetic

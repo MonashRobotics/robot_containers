@@ -1,0 +1,21 @@
+repositories:
+  baxter:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter.git
+    version: master
+  baxter_common:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter_common.git
+    version: master
+  baxter_examples:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter_examples.git
+    version: master
+  baxter_interface:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter_interface.git
+    version: master
+  baxter_tools:
+    type: git
+    url: https://github.com/RethinkRobotics/baxter_tools.git
+    version: master
