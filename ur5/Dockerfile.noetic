@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
 # Create and enter catkin workspace
 WORKDIR /ros_ws/src
 # Download source dependencies
-COPY ./pepper/noetic.repos /
+COPY ./ur5/noetic.repos /
 RUN vcs import . < /noetic.repos
 
 # Install dependencies using rosdep

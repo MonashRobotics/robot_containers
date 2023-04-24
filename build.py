@@ -12,6 +12,11 @@ robot_dockerfiles = {
     "abb_yumi-noetic": "abb_yumi/Dockerfile.noetic",
     "fetch-melodic": "fetch/Dockerfile.melodic",
     "fetch-noetic": "fetch/Dockerfile.noetic",
+    "jackal-noetic": "jackal/Dockerfile.noetic",
+    "jackal-foxy": "jackal/Dockerfile.foxy",
+    "jackal-humble": "jackal/Dockerfile.humble",
+    "ur5-noetic": "ur5/Dockerfile.noetic",
+    "ur5-humble": "ur5/Dockerfile.humble",
 }
 
 def build_container(image_name: str, dockerfile: str):

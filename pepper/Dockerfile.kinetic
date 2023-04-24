@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /ros_ws/src
 # Download source dependencies
 COPY ./pepper/kinetic.repos /
-RUN vcs import . < /kinetic.repos
+#RUN vcs import . < /kinetic.repos
 
 # Install dependencies using rosdep
 WORKDIR /ros_ws
-RUN apt-get update \
-    && rosdep update \
-    && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update \
+#    && rosdep update \
+#    && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
+#    && rm -rf /var/lib/apt/lists/*
 
 # RUN catkin_make -DCMAKE_BUILD_TYPE=Release

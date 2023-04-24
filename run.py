@@ -4,6 +4,7 @@ import argparse
 import subprocess
 
 def attach_to_container(image_name: str):
+    # docker exec -it container_name bash
     pass
 
 def start_container(image_name: str):

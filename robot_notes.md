@@ -19,7 +19,7 @@
 - Fetch https://github.com/ZebraDevs/fetch_ros
 
 ### Noetic & Humble
-- Jackal https://github.com/jackal/jackal_robot Humble maybe?
+- Jackal https://github.com/jackal/jackal_robot
 - Panda 
     - https://github.com/frankaemika/franka_ros
     - https://github.com/frankaemika/franka_ros2 Foxy confirmed, humble port ready to merge as of Feb 2023 https://github.com/frankaemika/franka_ros2/pull/10

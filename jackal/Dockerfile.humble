@@ -1,15 +1,14 @@
-FROM ros:noetic
+FROM ros:humble
 
-RUN apt-get update && apt-get install -y \
-    git \
-    python3-vcstool \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y \
+#    && rm -rf /var/lib/apt/lists/*
 
 # Create and enter catkin workspace
 WORKDIR /ros_ws/src
+
 # Download source dependencies
-COPY ./pepper/noetic.repos /
-RUN vcs import . < /noetic.repos
+COPY ./jackal/humble.repos /
+RUN vcs import . < /humble.repos
 
 # Install dependencies using rosdep
 WORKDIR /ros_ws
@@ -18,4 +17,4 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
     && rm -rf /var/lib/apt/lists/*
 
-RUN catkin_make -DCMAKE_BUILD_TYPE=Release
+#RUN colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
