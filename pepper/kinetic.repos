@@ -1,9 +1,0 @@
-repositories:
-  pepper_robot:
-    type: git
-    url: https://github.com/ros-naoqi/pepper_robot.git
-    version: master
-  naoqi_dcm_driver:
-    type: git
-    url: https://github.com/ros-naoqi/naoqi_dcm_driver.git
-    version: master
