@@ -21,24 +21,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - robot: abb_yumi
-          #   distro: melodic
-          # - robot: abb_yumi
-          #   distro: noetic
-          # - robot: baxter
-          #   distro: kinetic
-          # - robot: baxter
-          #   distro: noetic
-          # - robot: fetch
-          #   distro: noetic
-          # - robot: jackal
-          #   distro: noetic
-          # - robot: jackal
-          #   distro: foxy
-          # - robot: jackal
-          #   distro: humble
-          # - robot: ur5
-          #   distro: noetic
+          - robot: abb_yumi
+            distro: melodic
+          - robot: abb_yumi
+            distro: noetic
+          - robot: baxter
+            distro: kinetic
+          - robot: baxter
+            distro: noetic
+          - robot: fetch
+            distro: noetic
+          - robot: jackal
+            distro: noetic
+          - robot: jackal
+            distro: foxy
+          - robot: jackal
+            distro: humble
+          - robot: ur5
+            distro: noetic
           - robot: ur5
             distro: humble
     permissions:
