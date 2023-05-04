@@ -5,8 +5,9 @@ RUN apt-get update && apt-get install -y \
     python3-vcstool \
     ros-${ROS_DISTRO}-control-msgs \
     ros-${ROS_DISTRO}-cv-bridge \
+    ros-${ROS_DISTRO}-xacro \
     && rm -rf /var/lib/apt/lists/*
-# Note: rosdep fails to install control_msgs and cv_bridge on kinetic, so we install them manually here
+# Note: rosdep fails to install control_msgs, cv_bridge and xacro on kinetic, so we install them manually here
 
 # Create and enter catkin workspace
 WORKDIR /ros_ws/src
