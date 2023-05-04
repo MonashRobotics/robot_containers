@@ -14,6 +14,12 @@ e.g.
 
 See [build.py](build.py) for supported robot and rosdistro combinations.
 
+### Robot-Specific Notes
+
+#### UR5
+
+The driver for the robotiq gripper is not available for ROS2.
+
 ### Notes on GUI/GPU support
 
 https://github.com/osrf/rocker/tree/main/src/rocker/templates

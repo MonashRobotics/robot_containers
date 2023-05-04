@@ -15,6 +15,7 @@ robot_dockerfiles = {
     "jackal-humble": "jackal/Dockerfile.humble",
     "ur5-noetic": "ur5/Dockerfile.noetic",
     "ur5-humble": "ur5/Dockerfile.humble",
+    "ridgeback-noetic": "ridgeback/Dockerfile.noetic",
 }
 
 def build_container(image_name: str, dockerfile: str):
