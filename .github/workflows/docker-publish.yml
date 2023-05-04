@@ -61,7 +61,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/owenbrooks/${{ matrix.robot }}-${{ matrix.distro }}
+          images: ghcr.io/monashrobotics/${{ matrix.robot }}-${{ matrix.distro }}
 
       - name: Setup Docker buildx for layer caching
         uses: docker/setup-buildx-action@v2

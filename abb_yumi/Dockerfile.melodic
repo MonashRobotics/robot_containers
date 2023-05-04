@@ -19,4 +19,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
     && rm -rf /var/lib/apt/lists/*
 
-RUN catkin build -DCMAKE_BUILD_TYPE=Release
+# Build packages. Note: catkin config --extend is required because we can't source /opt/ros/$ROS_DISTRO/setup.bash in a Dockerfile
+RUN catkin config \
+    --extend /opt/ros/$ROS_DISTRO && \
+    catkin build -DCMAKE_BUILD_TYPE=Release
