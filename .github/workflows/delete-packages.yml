@@ -1,0 +1,60 @@
+name: Delete packages
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - delete_packages
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  delete_all_containers:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - robot: abb_yumi
+            distro: melodic
+          - robot: abb_yumi
+            distro: noetic
+          - robot: baxter
+            distro: kinetic
+          - robot: baxter
+            distro: noetic
+          - robot: fetch
+            distro: noetic
+          - robot: jackal
+            distro: noetic
+          - robot: jackal
+            distro: foxy
+          - robot: jackal
+            distro: humble
+          - robot: ridgeback
+            distro: noetic
+          - robot: ur5
+            distro: noetic
+          - robot: ur5
+            distro: humble
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN  }}
+
+      - uses: actions/delete-package-versions@v4
+        with: 
+          package-name: ${{ matrix.robot }}-${{ matrix.distro }}
+          package-type: 'container'
