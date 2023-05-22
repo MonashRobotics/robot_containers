@@ -1,8 +1,4 @@
 repositories:
-  Universal_Robots_ROS_Driver:
-    type: git
-    url: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
-    version: master
   robotiq:
     type: git
     url: https://github.com/jr-robotics/robotiq.git

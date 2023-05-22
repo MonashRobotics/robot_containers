@@ -3,6 +3,10 @@ FROM ros:noetic
 RUN apt-get update && apt-get install -y \
     git \
     python3-vcstool \
+    ros-$ROS_DISTRO-universal-robots \
+    ros-$ROS_DISTRO-ur-robot-driver \
+    ros-$ROS_DISTRO-ur-calibration \
+    ros-$ROS_DISTRO-ur-dashboard-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 # Add non-root user
