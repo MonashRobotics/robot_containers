@@ -38,6 +38,16 @@ def attach_to_container(container_name: str):
     starting_command = "bash" # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
     subprocess.run(f"docker exec -it {container_name} {starting_command}", shell=True)
 
+def remove_container(container_name: str):
+    remove_container_command = f"docker rm -f {container_name}"
+    print(remove_container_command)
+    subprocess.run(remove_container_command, shell=True)
+
+def remove_image(image_name: str):
+    remove_image_command = f"docker rmi -f {image_name}"
+    print(remove_image_command)
+    subprocess.run(remove_image_command, shell=True)
+
 def image_exists(image_name: str) -> bool:
     image_list_command = f"docker images -f reference={image_name} -q"
     output = subprocess.run(image_list_command, stdout=subprocess.PIPE, shell=True).stdout.decode() # run the command as if in a shell, capture stdout
@@ -45,12 +55,20 @@ def image_exists(image_name: str) -> bool:
     return already_exists
 
 def container_exists(container_name: str) -> bool:
-    container_list_command = f"docker ps -qa -f name={image_name}"
+    container_list_command = f"docker ps -qa -f name={container_name}"
     output = subprocess.run(container_list_command, stdout=subprocess.PIPE, shell=True).stdout.decode() # run the command as if in a shell, capture stdout
     already_exists = len(output) > 0
     return already_exists
 
-def main(project_name: str, dockerfile: str, force_rebuild: bool):
+def main(project_name: str, dockerfile: str, force_rebuild: bool, should_remove_container: bool, should_remove_image: bool):
+    if should_remove_container:
+        remove_container(project_name)
+        quit()
+    
+    if should_remove_image:
+        remove_image(project_name)
+        quit()
+    
     if force_rebuild or not image_exists(project_name):
         build_image(project_name, dockerfile)
 
@@ -64,11 +82,8 @@ if __name__ == "__main__":
     parser.add_argument('-n', '--name', default=PROJECT_NAME, help='name of project (used to name image and container)')
     parser.add_argument('-f', '--file', default=DOCKERFILE, help="dockerfile from which to build an image (if the image isn't already built)")
     parser.add_argument('-r', '--rebuild', action='store_true', help="force a rebuild of the docker image")
+    parser.add_argument('--rm', '--remove-container', action='store_true', help='delete the container')
+    parser.add_argument('--rmi', '--remove-image', action='store_true', help='delete the image')
     args = parser.parse_args()
 
-    image_name = args.name
-    docker_file = args.file
-    rebuild = args.rebuild
-    
-    main(image_name, docker_file, rebuild)  
-    
+    main(args.name, args.file, args.rebuild, args.rm, args.rmi)
