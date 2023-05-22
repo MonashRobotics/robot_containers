@@ -37,6 +37,18 @@ So that you don't need to type out your project name every time, you can change 
 
 Run `./run.py --help` for supported robot and rosdistro combinations.
 
+## Available Containers
+
+| Robots / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| --- | --- | --- | --- | --- |
+| ABB YuMi | ✅ | ✅ | ❌ | ❌ |
+| Baxter | ❌ | ✅ | ❌ | ❌ |
+| Fetch | ❌ | ✅ | ❌ | ❌ |
+| Jackal | ❌ | ✅ | ✅ | ✅ |
+| Panda | ❌ | ✅ | ❌ | ❌ |
+| Ridgeback | ❌ | ✅ | ❌ | ❌ |
+| UR5 | ❌ | ✅ | ❌ | ✅ |
+
 ## Examples
 
 ### UR5 Robot

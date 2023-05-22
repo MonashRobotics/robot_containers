@@ -88,7 +88,7 @@ if len(possible_hardware_options) > 0:
     if incompatible_hardware:
         quit()
 
-confirm = inquirer.confirm(message="Create project?", style=style, amark=tick).execute()
+confirm = inquirer.confirm(message="Create project?", default=True, style=style, amark=tick).execute()
 
 if not confirm:
     print("Cancelled.")
@@ -96,7 +96,7 @@ if not confirm:
 
 print(f"\nCreating project...")
 
-print(f"\nDone. Now run: ")
+color_print([("#00ffa1", "\nDone. "), ("", "Now run:")])
 print(f"""
     cd {name}
     ./run.py
