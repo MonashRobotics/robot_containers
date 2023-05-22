@@ -2,24 +2,11 @@
 from InquirerPy import inquirer
 from InquirerPy import get_style
 from InquirerPy.base.control import Choice
+from InquirerPy.utils import color_print
 style = get_style({"input": "#61afef", "questionmark": "#e5e512", "answermark": "#00ffa1 bold"}, style_override=False)
 tick = u'\u2714'
 
 # This template makes heavy use of https://inquirerpy.readthedocs.io/en/latest/
-
-from dataclasses import dataclass
-
-@dataclass
-class HardwareAddition:
-    short_name: str
-    long_name: str
-    supported_ros_versions: list[str]
-
-@dataclass
-class Robot:
-    short_name: str
-    long_name: str
-    supported_ros_versions: list[str]
 
 hardware_names = {
     "realsense_camera": "RealSense Camera",
@@ -50,12 +37,33 @@ ros_versions_by_robot = {
     "other": ["melodic", "noetic", "foxy", "humble"],
 }
 
-ros_versions_by_sensor = {
+ros_versions_by_hardware = {
     "realsense_camera": ["melodic", "noetic", "foxy", "humble"],
-    "robotiq_gripper": ["melodic", "noetic", "foxy", "humble"],
-    "robotiq_force_torque": ["melodic", "noetic", "foxy", "humble"],
-    "papillarray": ["melodic", "noetic", "foxy", "humble"],
+    "robotiq_gripper": ["melodic", "noetic"],
+    "robotiq_force_torque": ["melodic", "noetic"],
+    "papillarray": ["melodic", "noetic"],
 }
+
+hardware_options_by_robot = {
+    "abb_yumi": [],
+    "baxter": [],
+    "fetch": [],
+    "jackal": [
+        "realsense_camera"
+    ],
+    "panda": [
+        "realsense_camera"
+    ],
+    "ridgeback": [],
+    "ur5": [
+        "realsense_camera",
+        "robotiq_gripper",
+        "robotiq_force_torque",
+        "papillarray",
+    ],
+    "other": [],
+}
+
 
 name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
 robot = inquirer.select(
@@ -67,27 +75,18 @@ robot = inquirer.select(
 
 ros_distro = inquirer.select("ROS version:", choices=ros_versions_by_robot[robot], style=style, amark=tick).execute()
 
-hardware_options_by_robot = {
-    "abb_yumi": [],
-    "baxter": [],
-    "fetch": [],
-    "jackal": [],
-    "panda": [],
-    "ridgeback": [],
-    "ur5": [
-        "realsense_camera",
-        "robotiq_gripper",
-        "robotiq_force_torque",
-        "papillarray",
-    ],
-    "other": [],
-}
-
-possible_hardware_options = [option for option in hardware_options_by_robot[robot] if ros_distro in ros_versions_by_sensor[option]]
-possible_hardware_options = [Choice(key, hardware_names[key]) for key in possible_hardware_options]
+possible_hardware_options = [Choice(key, hardware_names[key]) for key in hardware_options_by_robot[robot]]
 
 if len(possible_hardware_options) > 0:
-    hardware = inquirer.checkbox("Additional hardware: (space to toggle selection)", choices=possible_hardware_options, style=style, amark=tick).execute()
+    hardware = inquirer.checkbox("Additional hardware:", instruction="(space to toggle selection)", choices=possible_hardware_options, style=style, amark=tick).execute()
+    incompatible_hardware = False
+    for hardware_option in hardware:
+        if ros_distro not in ros_versions_by_hardware[hardware_option]:
+            incompatible_hardware = True
+            color_print([("#ff5858", f"Error: {hardware_names[hardware_option]} is not compatible with ROS {ros_distro}.")])
+            print("Please choose a different ROS version or remove this hardware option and try again.")
+    if incompatible_hardware:
+        quit()
 
 confirm = inquirer.confirm(message="Create project?", style=style, amark=tick).execute()
 
