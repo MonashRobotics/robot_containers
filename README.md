@@ -2,17 +2,15 @@
 ## Running
 
 ```
-./build.py [robot]-[rosdistro]
 ./run.py [robot]-[rosdistro]
 ```
 
 e.g.
 ```
-./build.py jackal-foxy
 ./run.py jackal-foxy
 ```
 
-See [build.py](build.py) for supported robot and rosdistro combinations.
+Run `./run.py --help` for supported robot and rosdistro combinations.
 
 ### Robot-Specific Notes
 
