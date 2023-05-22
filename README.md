@@ -1,7 +1,10 @@
 
 # Robot Containers
 
-## Creating a new project
+This repository contains Dockerfiles for building containers for various robots.
+It also includes a python script for building and running the containers with support for graphical applications, GPU passthrough, realtime scheduling, host networking and full device access.
+
+## Usage: Creating a new project
 
 Create a folder for your project.
 ```bash
@@ -39,7 +42,7 @@ Run `./run.py --help` for supported robot and rosdistro combinations.
 
 ## Available Containers
 
-| Robots / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| Robot / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
 | --- | :---: | :---: | :---: | :---: |
 | ABB YuMi | ✅ | ✅ | ❌ | ❌ |
 | Baxter | ❌ | ✅ | ❌ | ❌ |
@@ -48,6 +51,13 @@ Run `./run.py --help` for supported robot and rosdistro combinations.
 | Panda | ❌ | ✅ | ❌ | ❌ |
 | Ridgeback | ❌ | ✅ | ❌ | ❌ |
 | UR5 | ❌ | ✅ | ❌ | ✅ |
+
+| Driver / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| --- | :---: | :---: | :---: | :---: |
+| RealSense Camera | ✅ | ✅ | ✅ | ✅ |
+| Velodyne LiDAR | ✅ | ✅ | ✅ | ✅ |
+| Robotiq 2F-85 Gripper | ✅ | ✅ | ❌ | ❌ |
+| Robotiq FT-300 Force-Torque Sensor | ✅ | ✅ | ❌ | ❌ |
 
 ## Examples
 
