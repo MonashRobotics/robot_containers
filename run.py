@@ -4,8 +4,8 @@ import argparse
 import subprocess
 
 # Default values when no arguments are provided.
-PROJECT_NAME="ur5-noetic"
-DOCKERFILE="ur5/Dockerfile.noetic"
+PROJECT_NAME="please_change_project_name"
+DOCKERFILE="./Dockerfile"
 
 def build_image(image_name: str, dockerfile: str):
     """ Build an image from the supplied dockerfile. Uses the current directory as the docker context. """

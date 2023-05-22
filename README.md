@@ -1,16 +1,52 @@
 
-## Running
+# Robot Containers
 
-```
-./run.py [robot]-[rosdistro]
+## Creating a new project
+
+Create a folder for your project.
+```bash
+mkdir my_project
+cd my_project
 ```
 
-e.g.
+Download the `run.py` python script from this repo.
+
+```bash
+wget https://raw.githubusercontent.com/MonashRobotics/robot_containers/main/run.py
+chmod +x ./run.py
 ```
-./run.py jackal-foxy
+
+Create a file named `Dockerfile` based on one of the existing container images.
+
+```bash
+echo "FROM ghcr.io/monashrobotics/ur5-noetic:main" > Dockerfile
+```
+
+Use the `run.py` script to build and enter your container:
+
+```bash
+./run.py --name my_project
+```
+
+So that you don't need to type out your project name every time, you can change the default values in `run.py`:
+
+```Dockerfile
+6   # Default values when no arguments are provided.
+7   PROJECT_NAME="my_project"
 ```
 
 Run `./run.py --help` for supported robot and rosdistro combinations.
+
+## Examples
+
+### UR5 Robot
+```
+./run.py -n my_ur5_project -f ur5/Dockerfile.noetic
+source devel/setup.bash
+roslaunch ur_robot_driver ur5_bringup.launch robot_ip:=10.0.0.2
+roslaunch ur5_moveit_config moveit_planning_execution.launch
+roslaunch ur5_moveit_config moveit_rviz.launch
+```
 
 ### Robot-Specific Notes
 
