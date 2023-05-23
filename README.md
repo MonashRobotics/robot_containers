@@ -69,23 +69,3 @@ roslaunch ur_robot_driver ur5_bringup.launch robot_ip:=10.0.0.2
 roslaunch ur5_moveit_config moveit_planning_execution.launch
 roslaunch ur5_moveit_config moveit_rviz.launch
 ```
-
-### Robot-Specific Notes
-
-#### UR5
-
-The driver for the robotiq gripper is not available for ROS2.
-
-### Notes on GUI/GPU support
-
-https://github.com/osrf/rocker/tree/main/src/rocker/templates
-
-https://github.com/dusty-nv/jetson-containers
-
-### How to create a .repos file for use by vcstool
-
-```
-git clone https://repo-a.git
-git clone https://repo-b.git
-vcs export > sourcecode.repos
-```
