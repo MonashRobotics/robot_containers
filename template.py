@@ -48,7 +48,7 @@ ros_versions_by_hardware = {
     "papillarray": ["melodic", "noetic"],
 }
 
-hardware_options_by_robot = {
+hardware_options_by_robot: dict[str, list[str]] = {
     "abb_yumi": [],
     "baxter": [],
     "fetch": [],
