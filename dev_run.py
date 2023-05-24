@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Script to make it easier to build and run containers from the images in this repo """
+""" Script to simplify building and running containers from the images in this repo """
 import argparse
 import subprocess
 
@@ -18,18 +18,23 @@ robot_dockerfiles = {
     "ridgeback-noetic": "ridgeback/Dockerfile.noetic",
 }
 
+
 def build_container(image_name: str, dockerfile: str):
     subprocess.run(["docker", "build", ".", "-f", dockerfile, "-t", image_name])
+
 
 def attach_to_container(image_name: str):
     # docker exec -it container_name bash
     pass
 
+
 def start_container(image_name: str):
     pass
 
+
 def create_container(image_name: str):
     pass
+
 
 def run_container(image_name: str):
     run_command = f"""docker run -it \
@@ -43,16 +48,20 @@ def run_container(image_name: str):
     print(run_command)
     subprocess.run(run_command, shell=True)
 
+
 def image_exists(image_name: str) -> bool:
     image_list_command = f"docker images -f reference={image_name} -q"
-    result = subprocess.run(image_list_command, stdout=subprocess.PIPE, shell=True) # run the command as if in a shell, capture stdout
+    result = subprocess.run(
+        image_list_command, stdout=subprocess.PIPE, shell=True
+    )  # run the command as if in a shell, capture stdout
     output = result.stdout.decode()
     already_exists = len(output) > 0
     return already_exists
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Runs docker containers')
-    parser.add_argument('robot', choices=robot_dockerfiles.keys())
+    parser = argparse.ArgumentParser(description="Runs docker containers")
+    parser.add_argument("robot", choices=robot_dockerfiles.keys())
     args = parser.parse_args()
 
     image_name = args.robot
