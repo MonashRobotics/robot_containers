@@ -18,5 +18,6 @@ jobs:
       - uses: chartboost/ruff-action@v1
       - name: Check types with mypy
         run: |
+          pip install .
           pip install mypy
           mypy .
