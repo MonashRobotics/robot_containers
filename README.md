@@ -1,8 +1,14 @@
 
 # Robot Containers
-
 This repository contains Dockerfiles for building containers for various robots.
 It also includes a python script for building and running the containers with support for graphical applications, GPU passthrough, realtime scheduling, host networking and full device access.
+
+## Installation
+
+- Install Docker using `sudo apt install docker.io`. Other installation methods may not play well with the nvidia-docker2 runtime.
+- Follow "Manage Docker as a non-root user" at https://docs.docker.com/engine/install/linux-postinstall/
+- In VSCode install the "Dev Container" extension
+- Install nvidia-docker2 by following https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#setting-up-nvidia-container-toolkit
 
 ## Usage: Creating a new project
 

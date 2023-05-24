@@ -42,3 +42,7 @@ git clone https://repo-a.git
 git clone https://repo-b.git
 vcs export > sourcecode.repos
 ```
+### rocker notes
+```
+rocker run --x11 --nvidia --cuda --user --home ghcr.io/monashrobotics
+```
