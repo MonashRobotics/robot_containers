@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# ruff: noqa: T201 S602
 """ Script to make it easier to build and run a container"""
 import argparse
 import subprocess
+import sys
 
 # Default values when no arguments are provided.
 PROJECT_NAME = "please_change_project_name"
@@ -14,7 +16,7 @@ def build_image(image_name: str, dockerfile: str):
 
     Uses the current directory as the docker context.
     """
-    subprocess.run(["docker", "build", ".", "-f", dockerfile, "-t", image_name])
+    subprocess.run(["docker", "build", ".", "-f", dockerfile, "-t", image_name], shell=True)  # noqa: S607
 
 
 def create_container(image_name: str):
@@ -61,13 +63,11 @@ def attach_to_container(container_name: str):
     stopped state.
     """
     # Allow container to create GUI windows on the host's X server
-    subprocess.run("xhost + >> /dev/null", shell=True)
+    subprocess.run("xhost + >> /dev/null", shell=True)  # noqa: S607
     # Start the container in case it has been stopped
     subprocess.run(f"docker start {container_name}", shell=True)
     # Attach a terminal into the container
-    starting_command = (
-        "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
-    )
+    starting_command = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
     subprocess.run(f"docker exec -it {container_name} {starting_command}", shell=True)
 
 
@@ -109,20 +109,20 @@ def container_exists(container_name: str) -> bool:
     return already_exists
 
 
-def main(
-    project_name: str,
-    dockerfile: str,
-    force_rebuild: bool,
-    should_remove_container: bool,
-    should_remove_image: bool,
-):
+def main(args: argparse.Namespace):
+    project_name = args.name
+    dockerfile = args.file
+    force_rebuild = args.rebuild
+    should_remove_container = args.rm
+    should_remove_image = args.rmi
+
     if should_remove_container:
         remove_container(project_name)
-        quit()
+        sys.exit()
 
     if should_remove_image:
         remove_image(project_name)
-        quit()
+        sys.exit()
 
     if force_rebuild or not image_exists(project_name):
         build_image(project_name, dockerfile)
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         "-f",
         "--file",
         default=DOCKERFILE,
-        help="""dockerfile from which to build an image (if the image isn't already 
+        help="""dockerfile from which to build an image (if the image isn't already
 built)""",
     )
     parser.add_argument(
@@ -154,12 +154,8 @@ built)""",
         action="store_true",
         help="force a rebuild of the docker image",
     )
-    parser.add_argument(
-        "--rm", "--remove-container", action="store_true", help="delete the container"
-    )
-    parser.add_argument(
-        "--rmi", "--remove-image", action="store_true", help="delete the image"
-    )
+    parser.add_argument("--rm", "--remove-container", action="store_true", help="delete the container")
+    parser.add_argument("--rmi", "--remove-image", action="store_true", help="delete the image")
     args = parser.parse_args()
 
-    main(args.name, args.file, args.rebuild, args.rm, args.rmi)
+    main(args)

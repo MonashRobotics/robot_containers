@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-from InquirerPy import inquirer
-from InquirerPy import get_style
+# ruff: noqa: T201
+import sys
+
+from InquirerPy import get_style, inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.utils import color_print
 
@@ -64,6 +66,7 @@ hardware_options_by_robot: dict[str, list[str]] = {
     "other": [],
 }
 
+
 def main():
     name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
     robot = inquirer.select(
@@ -77,9 +80,7 @@ def main():
         "ROS version:", choices=ros_versions_by_robot[robot], style=style, amark=tick
     ).execute()
 
-    possible_hardware_options = [
-        Choice(key, hardware_names[key]) for key in hardware_options_by_robot[robot]
-    ]
+    possible_hardware_options = [Choice(key, hardware_names[key]) for key in hardware_options_by_robot[robot]]
 
     if len(possible_hardware_options) > 0:
         hardware = inquirer.checkbox(
@@ -97,25 +98,23 @@ def main():
                     [
                         (
                             "#ff5858",
-                            f"""Error: {hardware_names[hardware_option]} is not compatible 
+                            f"""Error: {hardware_names[hardware_option]} is not compatible
     with ROS {ros_distro}.""",
                         )
                     ]
                 )
                 print(
-                    """Please choose a different ROS version or remove this hardware 
+                    """Please choose a different ROS version or remove this hardware
     option and try again."""
                 )
         if incompatible_hardware:
-            quit()
+            sys.exit()
 
-    confirm = inquirer.confirm(
-        message="Create project?", default=True, style=style, amark=tick
-    ).execute()
+    confirm = inquirer.confirm(message="Create project?", default=True, style=style, amark=tick).execute()
 
     if not confirm:
         print("Cancelled.")
-        quit()
+        sys.exit()
 
     print("\nCreating project...")
 
@@ -126,6 +125,7 @@ def main():
         ./run.py
     """
     )
+
 
 if __name__ == "__main__":
     main()
