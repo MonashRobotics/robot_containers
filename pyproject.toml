@@ -28,6 +28,9 @@ dependencies = [
   "inquirerpy~=0.3.4",
 ]
 
+[project.scripts]
+roboco = "roboco.__main__:main"
+
 [project.urls]
 Documentation = "https://github.com/monashrobotics/robot_containers#readme"
 Issues = "https://github.com/monashrobotics/robot_containers/issues"
