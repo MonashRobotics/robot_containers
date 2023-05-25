@@ -3,6 +3,7 @@ import os
 import shutil
 from pathlib import Path
 
+from roboco.__about__ import __version__
 from roboco.configurations import ProjectConfiguration, realsense_camera, ur5
 
 
@@ -21,10 +22,14 @@ def generate_from_template(configuration: ProjectConfiguration):
     os.chmod("run.py", 0o755)  # noqa: S103
 
     replace_string_in_file(Path(run_script_dest), "please_change_project_name", configuration.name)
+    print(__version__)
+    replace_string_in_file(
+        Path(dockerfile_dest), "Generated using roboco version x.x.x", f"Generated using roboco version {__version__}"
+    )
 
 
 def replace_string_in_file(file: Path, old: str, new: str):
-    """ Removes the old string and inserts the new string in its place. """
+    """Removes the old string and inserts the new string in its place."""
     with open(file) as f:
         new_text = f.read().replace(old, new)
     with open(file, "w") as f:
