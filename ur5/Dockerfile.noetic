@@ -2,7 +2,6 @@ FROM ros:noetic
 
 RUN apt-get update && apt-get install -y \
     git \
-    python3-vcstool \
     ros-$ROS_DISTRO-universal-robots \
     ros-$ROS_DISTRO-ur-robot-driver \
     ros-$ROS_DISTRO-ur-calibration \
@@ -21,8 +20,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 # Create and enter catkin workspace
 WORKDIR /home/${USERNAME}/ros_ws/src
 # Download source dependencies
-COPY ./ur5/noetic.repos /
-RUN vcs import . < /noetic.repos
+RUN git clone --branch noetic-devel https://github.com/jr-robotics/robotiq.git
 
 # Install dependencies using rosdep
 WORKDIR /home/${USERNAME}/ros_ws

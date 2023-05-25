@@ -13,8 +13,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /ros_ws/src
 
 # Download source dependencies
-COPY ./jackal/foxy.repos /
-RUN vcs import . < /foxy.repos
+RUN git clone --branch foxy-devel https://github.com/jackal/jackal.git
 
 # Install dependencies using rosdep
 WORKDIR /ros_ws
