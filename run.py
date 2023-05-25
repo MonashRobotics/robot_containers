@@ -2,6 +2,7 @@
 # ruff: noqa: T201 S602
 """ Script to make it easier to build and run a container"""
 import argparse
+import logging
 import subprocess
 import sys
 from pathlib import Path
@@ -19,9 +20,10 @@ def build_image(image_name: str, dockerfile: str):
     """
     dockerfile_exists = Path(dockerfile).exists()
     if not dockerfile_exists:
-        print(f"Error: {dockerfile} does not exist.")
+        log.error(f"Error: {dockerfile} does not exist.")
         sys.exit()
     build_command = f"docker build . -f {dockerfile} -t {image_name}"
+    log.debug(build_command)
     subprocess.run(build_command, shell=True)
 
 
@@ -59,7 +61,7 @@ def create_container(image_name: str, container_name: str):
         -d {image_name} \
         /usr/bin/tail -f /dev/null
     """
-    print(run_command)
+    log.info(run_command)
     subprocess.run(run_command, shell=True)
 
 
@@ -73,30 +75,34 @@ def attach_to_container(container_name: str):
     # Start the container in case it has been stopped
     subprocess.run(f"docker start {container_name}", shell=True)
     # Attach a terminal into the container
-    starting_command = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
-    subprocess.run(f"docker exec -it {container_name} {starting_command}", shell=True)
+    program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
+    attach_command = f"docker exec -it {container_name} {program_to_run}"
+    log.info(attach_command)
+    subprocess.run(attach_command, shell=True)
 
 
 def remove_container(container_name: str):
     """Delete the container."""
     remove_container_command = f"docker rm -f {container_name}"
-    print(remove_container_command)
+    log.info(remove_container_command)
     subprocess.run(remove_container_command, shell=True)
 
 
 def remove_image(image_name: str):
     """Delete the image."""
     remove_image_command = f"docker rmi -f {image_name}"
-    print(remove_image_command)
+    log.info(remove_image_command)
     subprocess.run(remove_image_command, shell=True)
 
 
 def image_exists(image_name: str) -> bool:
     """Check if an image with the specified name has previously been built"""
-    image_list_command = f"docker images -f reference=^/{image_name}$ -q"
+    image_list_command = f"docker images -f reference={image_name} -q"
+    log.debug(image_list_command)
     output = subprocess.run(
         image_list_command, stdout=subprocess.PIPE, shell=True
     ).stdout.decode()  # run the command as if in a shell, capture stdout
+    log.debug(output)
     already_exists = len(output) > 0
     return already_exists
 
@@ -107,19 +113,29 @@ def container_exists(container_name: str) -> bool:
 
     It can be in stopped or running state.
     """
-    container_list_command = f"docker ps -qa -f name=^/{container_name}$"
+    # regex used to filter containers by exact name, rather than just substring
+    container_list_command = f"docker ps -qa --no-trunc -f name=^/{container_name}$"
+    log.debug(container_list_command)
     output = subprocess.run(
         container_list_command, stdout=subprocess.PIPE, shell=True
     ).stdout.decode()  # run the command as if in a shell, capture stdout
+    log.debug(output)
     already_exists = len(output) > 0
     return already_exists
 
 
 def main(args: argparse.Namespace):
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    if args.debug:
+        log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.INFO)
+
     min_container_name_length = 2
     if not args.name or len(args.name) < min_container_name_length:
-        print("Error. Please provide a non-empty project name of at least 2 characters.")
+        log.error("Error. Please provide a non-empty project name of at least 2 characters.")
         sys.exit()
+
     project_name = args.name
     dockerfile = args.file
     force_rebuild = args.rebuild
@@ -166,6 +182,8 @@ built)""",
     )
     parser.add_argument("--rm", "--remove-container", action="store_true", help="delete the container")
     parser.add_argument("--rmi", "--remove-image", action="store_true", help="delete the image")
+    parser.add_argument("--debug", action="store_true", help="print debug messages")
     args = parser.parse_args()
 
+    log = logging.getLogger()
     main(args)
