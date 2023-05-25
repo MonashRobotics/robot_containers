@@ -24,8 +24,10 @@ tick = "\u2714"
 
 def main():
     name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
-    if not name:
-        color_print([(red, "Error: Please enter a non-empty name.")])
+    min_container_name_length = 2
+    if not name or len(name) < min_container_name_length:
+        error_message = f"Error: Please enter a non-empty name, of at least {min_container_name_length} characters."
+        color_print([(red, error_message)])
         sys.exit()
 
     robot_choice_key: str = inquirer.select(

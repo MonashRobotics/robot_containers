@@ -25,7 +25,7 @@ def build_image(image_name: str, dockerfile: str):
     subprocess.run(build_command, shell=True)
 
 
-def create_container(image_name: str):
+def create_container(image_name: str, container_name: str):
     """
     Use 'docker run' to create a container.
 
@@ -55,7 +55,7 @@ def create_container(image_name: str):
         --ulimit memlock=8428281856 \
         --entrypoint /ros_entrypoint.sh \
         --volume "$(pwd):/home/roboco/ros_ws/src/{PROJECT_NAME}" \
-        --name {image_name} \
+        --name {container_name} \
         -d {image_name} \
         /usr/bin/tail -f /dev/null
     """
@@ -93,7 +93,7 @@ def remove_image(image_name: str):
 
 def image_exists(image_name: str) -> bool:
     """Check if an image with the specified name has previously been built"""
-    image_list_command = f"docker images -f reference={image_name} -q"
+    image_list_command = f"docker images -f reference=^/{image_name}$ -q"
     output = subprocess.run(
         image_list_command, stdout=subprocess.PIPE, shell=True
     ).stdout.decode()  # run the command as if in a shell, capture stdout
@@ -107,7 +107,7 @@ def container_exists(container_name: str) -> bool:
 
     It can be in stopped or running state.
     """
-    container_list_command = f"docker ps -qa -f name={container_name}"
+    container_list_command = f"docker ps -qa -f name=^/{container_name}$"
     output = subprocess.run(
         container_list_command, stdout=subprocess.PIPE, shell=True
     ).stdout.decode()  # run the command as if in a shell, capture stdout
@@ -116,8 +116,9 @@ def container_exists(container_name: str) -> bool:
 
 
 def main(args: argparse.Namespace):
-    if not args.name:
-        print("Error. Please provide a non-empty project name.")
+    min_container_name_length = 2
+    if not args.name or len(args.name) < min_container_name_length:
+        print("Error. Please provide a non-empty project name of at least 2 characters.")
         sys.exit()
     project_name = args.name
     dockerfile = args.file
@@ -137,7 +138,7 @@ def main(args: argparse.Namespace):
         build_image(project_name, dockerfile)
 
     if not container_exists(project_name):
-        create_container(project_name)
+        create_container(project_name, project_name)
 
     attach_to_container(project_name)
 
