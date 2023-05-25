@@ -4,6 +4,7 @@
 import argparse
 import subprocess
 import sys
+from pathlib import Path
 
 # Default values when no arguments are provided.
 PROJECT_NAME = "please_change_project_name"
@@ -16,7 +17,12 @@ def build_image(image_name: str, dockerfile: str):
 
     Uses the current directory as the docker context.
     """
-    subprocess.run(["docker", "build", ".", "-f", dockerfile, "-t", image_name], shell=True)  # noqa: S607
+    dockerfile_exists = Path(dockerfile).exists()
+    if not dockerfile_exists:
+        print(f"Error: {dockerfile} does not exist.")
+        sys.exit()
+    build_command = f"docker build . -f {dockerfile} -t {image_name}"
+    subprocess.run(build_command, shell=True)
 
 
 def create_container(image_name: str):
@@ -110,6 +116,9 @@ def container_exists(container_name: str) -> bool:
 
 
 def main(args: argparse.Namespace):
+    if not args.name:
+        print("Error. Please provide a non-empty project name.")
+        sys.exit()
     project_name = args.name
     dockerfile = args.file
     force_rebuild = args.rebuild
