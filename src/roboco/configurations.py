@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
-ROSDistro = Literal["kinetic", "melodic", "noetic", "foxy", "humble"]
+ROSDistro = Literal["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"]
 
 
 @dataclass
