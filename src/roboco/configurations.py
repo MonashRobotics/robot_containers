@@ -47,7 +47,7 @@ ur5 = Robot(
     ["melodic", "noetic", "humble"],
     [realsense_camera, robotiq_2f85_gripper, robotiq_ft300_forcetorque, papillarray],
 )
-other = Robot("other", "Other", ["melodic", "noetic", "foxy", "humble"], [])
+other = Robot("ros", "Other/None", ["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"], [])
 
 robots = {
     "abb_yumi": abb_yumi,
@@ -57,7 +57,7 @@ robots = {
     "panda": panda,
     "ridgeback": ridgeback,
     "ur5": ur5,
-    "other": other,
+    "ros": other,
 }
 
 hardware_options = {
