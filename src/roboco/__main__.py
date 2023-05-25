@@ -11,8 +11,10 @@ from roboco.template import generate_from_template
 
 green = "#00ffa1"
 red = "#ff5858"
+yellow = "#e5e512"
+blue = "#61afef"
 style = get_style(
-    {"input": "#61afef", "questionmark": "#e5e512", "answermark": f"{green} bold"},
+    {"input": blue, "questionmark": yellow, "answermark": f"{green} bold"},
     style_override=False,
 )
 tick = "\u2714"
