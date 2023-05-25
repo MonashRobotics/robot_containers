@@ -1,14 +1,10 @@
 # Generated using roboco version x.x.x
-FROM ros:noetic
+FROM ros:galactic
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    ros-$ROS_DISTRO-universal-robots \
-    ros-$ROS_DISTRO-ur-robot-driver \
-    ros-$ROS_DISTRO-ur-calibration \
-    ros-$ROS_DISTRO-ur-dashboard-msgs \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     git \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Add non-root user
 ENV USERNAME=roboco
@@ -22,14 +18,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
 # Create and enter a ros workspace
 WORKDIR /home/${USERNAME}/ros_ws/src
 # Download source dependencies
-RUN git clone --branch noetic-devel https://github.com/jr-robotics/robotiq.git
+# RUN git clone --branch main https://github.com/some-organisation/some-repo.git
 
 # Install dependencies using rosdep
 WORKDIR /home/${USERNAME}/ros_ws
-RUN apt-get update \
-    && rosdep update \
-    && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update \
+#     && rosdep update \
+#     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Change to the non-root user and update file ownership
 RUN chown -R ${USERNAME} /home/${USERNAME}
@@ -38,4 +34,4 @@ USER $USERNAME
 RUN echo "export PS1='\[\e]0;\u@docker: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@docker\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> /home/${USERNAME}/.bashrc
 
 # Build source packages
-RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release'
+# RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release'

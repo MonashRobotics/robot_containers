@@ -1,6 +1,0 @@
-repositories:
-  robotiq:
-    type: git
-    url: https://github.com/jr-robotics/robotiq.git
-    version: noetic-devel
-  

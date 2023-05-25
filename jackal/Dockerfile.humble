@@ -7,8 +7,7 @@ FROM ros:humble
 WORKDIR /ros_ws/src
 
 # Download source dependencies
-COPY ./jackal/humble.repos /
-RUN vcs import . < /humble.repos
+RUN git clone --branch foxy-devel https://github.com/jackal/jackal.git
 
 # Install dependencies using rosdep
 WORKDIR /ros_ws

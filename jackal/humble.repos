@@ -1,5 +1,0 @@
-repositories:
-  jackal:
-    type: git
-    url: https://github.com/jackal/jackal.git
-    version: foxy-devel
