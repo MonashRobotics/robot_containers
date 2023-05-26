@@ -50,7 +50,7 @@ def main():
             sys.exit()
 
     name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
-    min_container_name_length = 2
+    min_container_name_length = 2 # minimum length allowed by docker
     if not name or len(name) < min_container_name_length:
         error_message = f"Error: Please enter a non-empty name, of at least {min_container_name_length} characters."
         color_print([(red, error_message)])
