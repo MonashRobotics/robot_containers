@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # ruff: noqa: T201
+import argparse
 import os
 import sys
 
@@ -7,6 +8,7 @@ from InquirerPy import get_style, inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.utils import color_print
 
+from roboco.__about__ import __version__
 from roboco.configurations import ProjectConfiguration, hardware_options, robots
 from roboco.template import generate_from_template
 
@@ -24,6 +26,20 @@ tick = "\u2714"
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Create a container for your robotics project")
+    parser.add_argument(
+        "-V",
+        "--version",
+        action="store_true",
+        default=False,
+        help="display version"
+    )
+    args = parser.parse_args()
+
+    if args.version:
+        print(__version__)
+        sys.exit()
+
     if os.path.exists("run.py") or os.path.exists("Dockerfile"):
         warn_message = "Warning: run.py and/or Dockerfile already exist(s) in this directory."
         color_print([(yellow, warn_message)])
