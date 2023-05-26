@@ -2,7 +2,6 @@ FROM ros:kinetic
 
 RUN apt-get update && apt-get install -y \
     git \
-    python3-vcstool \
     ros-${ROS_DISTRO}-control-msgs \
     ros-${ROS_DISTRO}-cv-bridge \
     ros-${ROS_DISTRO}-xacro \
