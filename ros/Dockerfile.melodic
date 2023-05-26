@@ -1,4 +1,3 @@
-# Generated using roboco version x.x.x
 FROM ros:melodic
 
 # Install system dependencies

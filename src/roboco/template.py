@@ -22,10 +22,7 @@ def generate_from_template(configuration: ProjectConfiguration):
     os.chmod("run.py", 0o755)  # noqa: S103
 
     replace_string_in_file(Path(run_script_dest), "please_change_project_name", configuration.name)
-    print(__version__)
-    replace_string_in_file(
-        Path(dockerfile_dest), "Generated using roboco version x.x.x", f"Generated using roboco version {__version__}"
-    )
+    add_to_beginning_of_file(Path(dockerfile_dest), f"# Generated using roboco version {__version__}\n")
 
 
 def replace_string_in_file(file: Path, old: str, new: str):
@@ -33,7 +30,17 @@ def replace_string_in_file(file: Path, old: str, new: str):
     with open(file) as f:
         new_text = f.read().replace(old, new)
     with open(file, "w") as f:
+        f.write("# hello there\n")
         f.write(new_text)
+
+
+def add_to_beginning_of_file(file: Path, new: str):
+    """Adds the new string to the beginning of the file."""
+    with open(file) as f:
+        old_text = f.read()
+    with open(file, "w") as f:
+        f.write(new)
+        f.write(old_text)
 
 
 if __name__ == "__main__":
