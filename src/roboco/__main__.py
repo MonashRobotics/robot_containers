@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # ruff: noqa: T201
+import os
 import sys
 
 from InquirerPy import get_style, inquirer
@@ -23,6 +24,15 @@ tick = "\u2714"
 
 
 def main():
+    if os.path.exists("run.py") or os.path.exists("Dockerfile"):
+        warn_message = "Warning: run.py and/or Dockerfile already exist(s) in this directory."
+        color_print([(yellow, warn_message)])
+        overwrite_message = "Overwrite these files and continue?"
+        overwrite = inquirer.confirm(message=overwrite_message, default=False, style=style, amark=tick).execute()
+        if not overwrite:
+            print("Operation cancelled.")
+            sys.exit()
+
     name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
     min_container_name_length = 2
     if not name or len(name) < min_container_name_length:
