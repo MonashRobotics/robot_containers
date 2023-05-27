@@ -71,7 +71,7 @@ def attach_to_container(container_name: str):
     stopped state.
     """
     # Allow container to create GUI windows on the host's X server
-    subprocess.run("xhost + >> /dev/null", shell=True)  # noqa: S607
+    subprocess.run("xhost + >> /dev/null", shell=True)
     # Start the container in case it has been stopped
     start_command = f"docker start {container_name}"
     log.info(start_command)
@@ -126,66 +126,63 @@ def container_exists(container_name: str) -> bool:
     return already_exists
 
 
+def shell():
+    """Run a shell inside the container."""
+    if not image_exists(PROJECT_NAME):
+        build_image(PROJECT_NAME, DOCKERFILE)
+
+    if not container_exists(PROJECT_NAME):
+        create_container(PROJECT_NAME, PROJECT_NAME)
+    else:
+        attach_to_container(PROJECT_NAME)
+
+
+def build():
+    build_image(PROJECT_NAME, DOCKERFILE)
+
+
+def rm():
+    remove_container(PROJECT_NAME)
+
+
+def rmi():
+    remove_image(PROJECT_NAME)
+
+
 def main(args: argparse.Namespace):
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    if args.debug:
+    if args.verbose:
         log.setLevel(logging.DEBUG)
     else:
         log.setLevel(logging.INFO)
 
-    min_container_name_length = 2
-    if not args.name or len(args.name) < min_container_name_length:
-        log.error("Error. Please provide a non-empty project name of at least 2 characters.")
-        sys.exit()
-
-    project_name = args.name
-    dockerfile = args.file
-    force_rebuild = args.rebuild
-    should_remove_container = args.rm
-    should_remove_image = args.rmi
-
-    if should_remove_container:
-        remove_container(project_name)
-        sys.exit()
-
-    if should_remove_image:
-        remove_image(project_name)
-        sys.exit()
-
-    if force_rebuild or not image_exists(project_name):
-        build_image(project_name, dockerfile)
-
-    if not container_exists(project_name):
-        create_container(project_name, project_name)
-    else:
-        attach_to_container(project_name)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Runs docker containers")
-    parser.add_argument(
-        "-n",
-        "--name",
-        default=PROJECT_NAME,
-        help="name of project (used to name image and container)",
+    subparsers = parser.add_subparsers(help="sub-command help")
+    parser_shell = subparsers.add_parser(
+        "shell", help="run a shell inside a docker container, building and starting it if necessary"
     )
-    parser.add_argument(
-        "-f",
-        "--file",
-        default=DOCKERFILE,
-        help="""dockerfile from which to build an image (if the image isn't already
-built)""",
-    )
-    parser.add_argument(
-        "-r",
-        "--rebuild",
-        action="store_true",
-        help="force a rebuild of the docker image",
-    )
-    parser.add_argument("--rm", "--remove-container", action="store_true", help="delete the container")
-    parser.add_argument("--rmi", "--remove-image", action="store_true", help="delete the image")
-    parser.add_argument("--debug", action="store_true", help="print debug messages")
-    args = parser.parse_args()
+    parser_shell.set_defaults(func=shell)
+    parser_build = subparsers.add_parser("build", help="build a docker image")
+    parser_build.set_defaults(func=build)
+    parser_rm = subparsers.add_parser("rm", help="remove a docker container")
+    parser_rm.set_defaults(func=rm)
+    parser_rmi = subparsers.add_parser("rmi", help="remove a docker image")
+    parser_rmi.set_defaults(func=rmi)
+    parser.add_argument("--verbose", action="store_true", help="print debug messages")
 
     log = logging.getLogger()
-    main(args)
+    min_container_name_length = 2
+    if len(PROJECT_NAME) < min_container_name_length:
+        log.error(
+            f"Error. Project name '{PROJECT_NAME}' is too short."
+            "Please provide a non-empty project name of at least 2 characters."
+        )
+        sys.exit()
+
+    args = parser.parse_args()
+    print(args)
+    args.func(args)
+
+    # main(args )
