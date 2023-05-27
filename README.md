@@ -1,54 +1,90 @@
 
 # Robot Containers
-This repository contains Dockerfiles for building containers for various robots.
-It also includes a python script for building and running the containers with support for graphical applications, GPU passthrough, realtime scheduling, host networking and full device access.
+This repository contains Dockerfiles for building containers for [various robots](#available-containers).
+It also includes a python script `run.py` that wraps the `docker` command to enable:
+
+- building, starting and entering the container in one step
+- graphical applications
+- nvidia GPU passthrough
+- realtime scheduling
+- host networking
+- full external device access (USB, cameras, etc.)
+
+Finally, it includes `roboco`, a script for generating a new project from the included Dockerfiles.
 
 [![CI - Test](https://github.com/monashrobotics/robot_containers/actions/workflows/test.yml/badge.svg)](https://github.com/monashrobotics/robot_containers/actions/workflows/test.yml)
 [![CI - Docker Images](https://github.com/monashrobotics/robot_containers/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/monashrobotics/robot_containers/actions/workflows/docker-publish.yml)
 [![linting - Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://github.com/charliermarsh/ruff) [![code style - Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![types - Mypy](https://img.shields.io/badge/types-Mypy-blue.svg)](https://github.com/python/mypy) [![License - MIT](https://img.shields.io/badge/license-MIT-9400d3.svg)](https://spdx.org/licenses/)
 
-## Installation
+## Table of Contents
 
-- Install Docker using `sudo apt install docker.io`. Other installation methods may not play well with the nvidia-docker2 runtime.
+  * [Requirements](#requirements)
+  * [Installation](#installation)
+  * [Usage](#usage)
+    * [Creating a new project](#creating-a-new-project)
+    * [Running the container](#running-the-container)
+    * [Customising the container](#customising-the-container)
+* [Available containers](#available-containers)
+
+## Requirements
+
+### Docker
+- Tested with Docker 20.10.23. 
+
+- Install on Ubuntu using `sudo apt install docker.io` (other installation methods may not play well with the nvidia-docker2 runtime.)
+
 - Follow "Manage Docker as a non-root user" at https://docs.docker.com/engine/install/linux-postinstall/
-- In VSCode install the "Dev Container" extension
+
+### nvidia-docker2 (for GPU support, optional)
 - Install nvidia-docker2 by following https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#setting-up-nvidia-container-toolkit
 
-## Usage: Creating a new project
+### VSCode - Dev Containers Extension (Optional)
+- Tested with v0.292.0 of Dev Containers extension https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 
-Create a folder for your project.
-```bash
-mkdir my_project
-cd my_project
+## Installation
+
+### Using pip
+```
+pip install roboco
 ```
 
-Download the `run.py` python script from this repo.
-
-```bash
-wget https://raw.githubusercontent.com/MonashRobotics/robot_containers/main/run.py
-chmod +x ./run.py
+### Using git
+```
+git clone https://github.com/monashrobotics/robot_containers.git
+cd robot_containers
+pip install .
 ```
 
-Create a file named `Dockerfile` based on one of the existing container images.
-
-```bash
-echo "FROM ghcr.io/monashrobotics/ur5-noetic:main" > Dockerfile
+## Usage
+### Creating a new project
+```
+roboco init
 ```
 
-Use the `run.py` script to build and enter your container:
+Follow the prompts to select the robot type and additional features.
 
-```bash
-./run.py --name my_project
+Once completed, there will be two new files in your current directory: `Dockerfile` and `run.py`.
+
+### Running the container
+
+Build the image and run the container using:
+```
+./run.py
 ```
 
-So that you don't need to type out your project name every time, you can change the default values in `run.py`:
+### Customising the container
 
-```Dockerfile
-6   # Default values when no arguments are provided.
-7   PROJECT_NAME="my_project"
+The `Dockerfile` can be edited to add additional dependencies or change the base image.
+
+When you make changes to the `Dockerfile`, you will need to rebuild the image using:
 ```
-
-Run `./run.py --help` for supported robot and rosdistro combinations.
+./run.py build
+```
+Then remove the old container and start a new one:
+```
+./run.py rm
+./run.py
+```
 
 ## Available Containers
 
@@ -68,14 +104,3 @@ Run `./run.py --help` for supported robot and rosdistro combinations.
 | Velodyne LiDAR | ✅ | ✅ | ✅ | ✅ |
 | Robotiq 2F-85 Gripper | ✅ | ✅ | ❌ | ❌ |
 | Robotiq FT-300 Force-Torque Sensor | ✅ | ✅ | ❌ | ❌ |
-
-## Examples
-
-### UR5 Robot
-```
-./run.py -n my_ur5_project -f ur5/Dockerfile.noetic
-source devel/setup.bash
-roslaunch ur_robot_driver ur5_bringup.launch robot_ip:=10.0.0.2
-roslaunch ur5_moveit_config moveit_planning_execution.launch
-roslaunch ur5_moveit_config moveit_rviz.launch
-```
