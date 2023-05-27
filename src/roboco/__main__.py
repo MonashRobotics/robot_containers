@@ -27,13 +27,7 @@ tick = "\u2714"
 
 def main():
     parser = argparse.ArgumentParser(description="Create a container for your robotics project")
-    parser.add_argument(
-        "-V",
-        "--version",
-        action="store_true",
-        default=False,
-        help="display version"
-    )
+    parser.add_argument("-V", "--version", action="store_true", default=False, help="display version")
     args = parser.parse_args()
 
     if args.version:
@@ -50,7 +44,7 @@ def main():
             sys.exit()
 
     name = inquirer.text(message="Project name:", style=style, amark=tick).execute()
-    min_container_name_length = 2 # minimum length allowed by docker
+    min_container_name_length = 2  # minimum length allowed by docker
     if not name or len(name) < min_container_name_length:
         error_message = f"Error: Please enter a non-empty name, of at least {min_container_name_length} characters."
         color_print([(red, error_message)])
