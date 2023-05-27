@@ -31,6 +31,8 @@ RUN chown -R ${USERNAME} /home/${USERNAME}
 USER $USERNAME
 # Change prompt to show we are in a docker container
 RUN echo "export PS1='\[\e]0;\u@docker: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@docker\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> /home/${USERNAME}/.bashrc
+# Automatically source ros setup files
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Build source packages
 # RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release'

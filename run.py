@@ -58,8 +58,8 @@ def create_container(image_name: str, container_name: str):
         --entrypoint /ros_entrypoint.sh \
         --volume "$(pwd):/home/roboco/ros_ws/src/{PROJECT_NAME}" \
         --name {container_name} \
-        -d {image_name} \
-        /usr/bin/tail -f /dev/null
+        -it {image_name} \
+        bash
     """
     log.info(run_command)
     subprocess.run(run_command, shell=True)
@@ -73,7 +73,9 @@ def attach_to_container(container_name: str):
     # Allow container to create GUI windows on the host's X server
     subprocess.run("xhost + >> /dev/null", shell=True)  # noqa: S607
     # Start the container in case it has been stopped
-    subprocess.run(f"docker start {container_name}", shell=True)
+    start_command = f"docker start {container_name}"
+    log.info(start_command)
+    subprocess.run(start_command, shell=True)
     # Attach a terminal into the container
     program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
     attach_command = f"docker exec -it {container_name} {program_to_run}"
@@ -155,8 +157,8 @@ def main(args: argparse.Namespace):
 
     if not container_exists(project_name):
         create_container(project_name, project_name)
-
-    attach_to_container(project_name)
+    else:
+        attach_to_container(project_name)
 
 
 if __name__ == "__main__":
