@@ -7,22 +7,19 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Default values when no arguments are provided.
+# Configuration. Change these to suit your project.
 PROJECT_NAME = "please_change_project_name"
 DOCKERFILE = "./Dockerfile"
+BUILD_CONTEXT = "."
 
 
-def build_image(image_name: str, dockerfile: str):
-    """
-    Build an image from the supplied dockerfile.
-
-    Uses the current directory as the docker context.
-    """
+def build_image(image_name: str, dockerfile: str, build_context: str):
+    """Build an image from the supplied dockerfile in the given context."""
     dockerfile_exists = Path(dockerfile).exists()
     if not dockerfile_exists:
         log.error(f"Error: {dockerfile} does not exist.")
         sys.exit()
-    build_command = f"docker build . -f {dockerfile} -t {image_name}"
+    build_command = f"docker build {build_context} -f {dockerfile} -t {image_name}"
     log.debug(build_command)
     subprocess.run(build_command, shell=True)
 
@@ -41,8 +38,7 @@ def create_container(image_name: str, container_name: str):
     - Realtime scheduling support is enabled by setting ulimits
     upstream docker images.
     - The current working directory is shared as a volume inside the container.
-    - The container is started in the background, so that we can later attach
-    to it from multiple terminals using 'docker exec'.
+    - The terminal is attached to the container.
     """
     run_command = f"""docker run -it \
         -e DISPLAY \
@@ -107,8 +103,8 @@ def command_returns_empty(command: str) -> bool:
         command, stdout=subprocess.PIPE, shell=True
     ).stdout.decode()  # run the command as if in a shell, capture stdout
     log.debug(output)
-    is_nonempty = len(output) > 0
-    return is_nonempty
+    is_empty = len(output) == 0
+    return is_empty
 
 
 def image_exists(image_name: str) -> bool:
@@ -150,13 +146,13 @@ def main(args: argparse.Namespace):
 
     if args.action == "run" or args.action is None:
         if not image_exists(PROJECT_NAME):
-            build_image(PROJECT_NAME, DOCKERFILE)
+            build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
         if not container_exists(PROJECT_NAME):
             create_container(PROJECT_NAME, PROJECT_NAME)
         else:
             attach_to_container(PROJECT_NAME)
     elif args.action == "build":
-        build_image(PROJECT_NAME, DOCKERFILE)
+        build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
     elif args.action == "rm":
         remove_container(PROJECT_NAME)
     elif args.action == "rmi":
