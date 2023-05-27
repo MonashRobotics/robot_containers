@@ -39,7 +39,6 @@ def create_container(image_name: str, container_name: str):
     - Loading of kernel modules from inside the container is enabled by sharing
     /lib/modules as a volume.
     - Realtime scheduling support is enabled by setting ulimits
-    - The ROS distro is sourced by the ros_entrypoint.sh script supplied in the
     upstream docker images.
     - The current working directory is shared as a volume inside the container.
     - The container is started in the background, so that we can later attach
@@ -55,7 +54,6 @@ def create_container(image_name: str, container_name: str):
         --ulimit rtprio=99 \
         --ulimit rttime=-1 \
         --ulimit memlock=8428281856 \
-        --entrypoint /ros_entrypoint.sh \
         --volume "$(pwd):/home/roboco/ros_ws/src/{PROJECT_NAME}" \
         --name {container_name} \
         -it {image_name} \
@@ -71,16 +69,21 @@ def attach_to_container(container_name: str):
     stopped state.
     """
     # Allow container to create GUI windows on the host's X server
-    subprocess.run("xhost + >> /dev/null", shell=True)
-    # Start the container in case it has been stopped
-    start_command = f"docker start {container_name}"
-    log.info(start_command)
-    subprocess.run(start_command, shell=True)
-    # Attach a terminal into the container
-    program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
-    attach_command = f"docker exec -it {container_name} {program_to_run}"
-    log.info(attach_command)
-    subprocess.run(attach_command, shell=True)
+    xhost_command = "xhost + >> /dev/null"
+    log.info(xhost_command)
+    subprocess.run(xhost_command, shell=True)
+
+    if not container_is_running(container_name):
+        # Start and attach to the container
+        start_command = f"docker start -ia {container_name}"
+        log.info(start_command)
+        subprocess.run(start_command, shell=True)
+    else:
+        # Attach a new terminal into the running container
+        program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
+        attach_command = f"docker exec -it {container_name} {program_to_run}"
+        log.info(attach_command)
+        subprocess.run(attach_command, shell=True)
 
 
 def remove_container(container_name: str):
@@ -97,82 +100,46 @@ def remove_image(image_name: str):
     subprocess.run(remove_image_command, shell=True)
 
 
+def command_returns_empty(command: str) -> bool:
+    """Run the command and return whether or not the output was empty."""
+    log.debug(command)
+    output = subprocess.run(
+        command, stdout=subprocess.PIPE, shell=True
+    ).stdout.decode()  # run the command as if in a shell, capture stdout
+    log.debug(output)
+    is_nonempty = len(output) > 0
+    return is_nonempty
+
+
 def image_exists(image_name: str) -> bool:
     """Check if an image with the specified name has previously been built"""
     image_list_command = f"docker images -f reference={image_name} -q"
-    log.debug(image_list_command)
-    output = subprocess.run(
-        image_list_command, stdout=subprocess.PIPE, shell=True
-    ).stdout.decode()  # run the command as if in a shell, capture stdout
-    log.debug(output)
-    already_exists = len(output) > 0
-    return already_exists
+    return not command_returns_empty(image_list_command)
 
 
 def container_exists(container_name: str) -> bool:
-    """
-    Check if an image with the specified name has previously been created.
-
-    It can be in stopped or running state.
-    """
+    """Check if a container with the specified name has previously been created."""
     # regex used to filter containers by exact name, rather than just substring
     container_list_command = f"docker ps -qa --no-trunc -f name=^/{container_name}$"
-    log.debug(container_list_command)
-    output = subprocess.run(
-        container_list_command, stdout=subprocess.PIPE, shell=True
-    ).stdout.decode()  # run the command as if in a shell, capture stdout
-    log.debug(output)
-    already_exists = len(output) > 0
-    return already_exists
+    return not command_returns_empty(container_list_command)
 
 
-def shell():
-    """Run a shell inside the container."""
-    if not image_exists(PROJECT_NAME):
-        build_image(PROJECT_NAME, DOCKERFILE)
-
-    if not container_exists(PROJECT_NAME):
-        create_container(PROJECT_NAME, PROJECT_NAME)
-    else:
-        attach_to_container(PROJECT_NAME)
-
-
-def build():
-    build_image(PROJECT_NAME, DOCKERFILE)
-
-
-def rm():
-    remove_container(PROJECT_NAME)
-
-
-def rmi():
-    remove_image(PROJECT_NAME)
+def container_is_running(container_name: str) -> bool:
+    """Check if a container with the specified name is currently running."""
+    # regex used to filter containers by exact name, rather than just substring
+    container_list_command = f"docker ps -q --no-trunc -f name=^/{container_name}$"
+    return not command_returns_empty(container_list_command)
 
 
 def main(args: argparse.Namespace):
+    # Set up console printing
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     if args.verbose:
         log.setLevel(logging.DEBUG)
     else:
         log.setLevel(logging.INFO)
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Runs docker containers")
-    subparsers = parser.add_subparsers(help="sub-command help")
-    parser_shell = subparsers.add_parser(
-        "shell", help="run a shell inside a docker container, building and starting it if necessary"
-    )
-    parser_shell.set_defaults(func=shell)
-    parser_build = subparsers.add_parser("build", help="build a docker image")
-    parser_build.set_defaults(func=build)
-    parser_rm = subparsers.add_parser("rm", help="remove a docker container")
-    parser_rm.set_defaults(func=rm)
-    parser_rmi = subparsers.add_parser("rmi", help="remove a docker image")
-    parser_rmi.set_defaults(func=rmi)
-    parser.add_argument("--verbose", action="store_true", help="print debug messages")
-
-    log = logging.getLogger()
+    # Check that the project name is valid
     min_container_name_length = 2
     if len(PROJECT_NAME) < min_container_name_length:
         log.error(
@@ -181,8 +148,40 @@ if __name__ == "__main__":
         )
         sys.exit()
 
-    args = parser.parse_args()
-    print(args)
-    args.func(args)
+    if args.action == "run" or args.action is None:
+        if not image_exists(PROJECT_NAME):
+            build_image(PROJECT_NAME, DOCKERFILE)
+        if not container_exists(PROJECT_NAME):
+            create_container(PROJECT_NAME, PROJECT_NAME)
+        else:
+            attach_to_container(PROJECT_NAME)
+    elif args.action == "build":
+        build_image(PROJECT_NAME, DOCKERFILE)
+    elif args.action == "rm":
+        remove_container(PROJECT_NAME)
+    elif args.action == "rmi":
+        remove_image(PROJECT_NAME)
 
-    # main(args )
+
+if __name__ == "__main__":
+    log = logging.getLogger()
+    parser = argparse.ArgumentParser(
+        description="Runs docker containers",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""actions:
+  run (default)       run the container, building the image if necessary
+  build               build the image
+  rm                  remove the container
+  rmi                 remove the image""",
+    )
+
+    parser.add_argument(
+        "action",
+        nargs="?",  # allows the parameter to be optional so we can shell by default
+        help="action to perform on the container/image",
+        choices=["run", "build", "rm", "rmi"],
+    )
+    parser.add_argument("--verbose", action="store_true", help="print debug messages")
+
+    args = parser.parse_args()
+    main(args)
