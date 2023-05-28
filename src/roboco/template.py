@@ -1,6 +1,7 @@
 # ruff: noqa: T201
 import os
 import shutil
+from importlib.resources import files
 from pathlib import Path
 
 from roboco import __version__
@@ -8,12 +9,13 @@ from roboco.configurations import ProjectConfiguration, realsense_camera, ur5
 
 
 def generate_from_template(configuration: ProjectConfiguration):
-    print(f"Generating from {configuration.robot.key}")
-    package_dir = Path(__file__).parent.parent.parent
+    dockerfile_template = f"{configuration.robot.key}/Dockerfile.{configuration.ros_distro}"
+    print(f"Generating from {dockerfile_template}")
+    package_dir = files("roboco")
     run_script_dest = "./run.py"
     dockerfile_dest = "./Dockerfile"
     run_script_src = f"{package_dir}/run.py"
-    dockerfile_src = f"templates/{package_dir}/{configuration.robot.key}/Dockerfile.{configuration.ros_distro}"
+    dockerfile_src = f"{package_dir}/templates/{dockerfile_template}"
 
     shutil.copyfile(dockerfile_src, dockerfile_dest)
     shutil.copyfile(run_script_src, run_script_dest)

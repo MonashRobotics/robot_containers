@@ -39,10 +39,10 @@ Source = "https://github.com/monashrobotics/robot_containers"
 [tool.hatch.version]
 path = "src/roboco/__init__.py"
 
-[tool.hatch.build]
-include = [
-  "templates/"
-]
+[tool.hatch.build.targets.wheel.force-include]
+"./templates" = "roboco/templates"
+"./run.py" = "roboco/run.py"
+
 
 [tool.hatch.envs.default]
 dependencies = [
