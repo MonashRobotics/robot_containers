@@ -8,7 +8,7 @@ from InquirerPy import get_style, inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.utils import color_print
 
-from roboco.__about__ import __version__
+from roboco import __version__
 from roboco.configurations import ProjectConfiguration, hardware_options, robots
 from roboco.template import generate_from_template
 

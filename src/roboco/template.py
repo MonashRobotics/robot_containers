@@ -3,7 +3,7 @@ import os
 import shutil
 from pathlib import Path
 
-from roboco.__about__ import __version__
+from roboco import __version__
 from roboco.configurations import ProjectConfiguration, realsense_camera, ur5
 
 

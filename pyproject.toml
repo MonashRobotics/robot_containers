@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "roboco"
 dynamic = ["version"]
-description = 'A tool to generate Dockerfiles for use in robotics, as well as a script to build and enter these containers, enabling with support for graphical applications, GPU passthrough, realtime scheduling, host networking and full device access.'
+description = 'A tool to generate Dockerfiles for use in robotics, as well as a script to build and enter these containers, with support for graphical applications, GPU passthrough, realtime scheduling, host networking and full device access.'
 readme = "README.md"
 requires-python = ">=3.7"
 license = "MIT"
@@ -37,7 +37,7 @@ Issues = "https://github.com/monashrobotics/robot_containers/issues"
 Source = "https://github.com/monashrobotics/robot_containers"
 
 [tool.hatch.version]
-path = "src/roboco/__about__.py"
+path = "src/roboco/__init__.py"
 
 [tool.hatch.envs.default]
 dependencies = [
