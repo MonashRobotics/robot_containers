@@ -22,18 +22,28 @@ style = get_style(
 )
 tick = "\u2714"
 
-# This template makes heavy use of https://inquirerpy.readthedocs.io/en/latest/
-
 
 def main():
     parser = argparse.ArgumentParser(description="Create a container for your robotics project")
     parser.add_argument("-V", "--version", action="store_true", default=False, help="display version")
+    subparsers = parser.add_subparsers(dest="command")
+    subparsers.add_parser("init", help="generate a Dockerfile and run script for your project")
+    subparsers.add_parser("snippet", help="display snippets to add to your Dockerfile")
     args = parser.parse_args()
 
     if args.version:
         print(__version__)
         sys.exit()
 
+    if args.command is None:
+        parser.print_help()
+        sys.exit()
+    elif args.command == "init":
+        init()
+    elif args.command == "snippet":
+        snippet()
+
+def init():
     if os.path.exists("run.py") or os.path.exists("Dockerfile"):
         warn_message = "Warning: run.py and/or Dockerfile already exist(s) in this directory."
         color_print([(yellow, warn_message)])
@@ -107,6 +117,8 @@ def main():
     """
     )
 
+def snippet():
+    color_print([(yellow, "Snippets not implemented yet.")])
 
 if __name__ == "__main__":
     main()
