@@ -13,7 +13,7 @@ def generate_from_template(configuration: ProjectConfiguration):
     run_script_dest = "./run.py"
     dockerfile_dest = "./Dockerfile"
     run_script_src = f"{package_dir}/run.py"
-    dockerfile_src = f"{package_dir}/{configuration.robot.key}/Dockerfile.{configuration.ros_distro}"
+    dockerfile_src = f"templates/{package_dir}/{configuration.robot.key}/Dockerfile.{configuration.ros_distro}"
 
     shutil.copyfile(dockerfile_src, dockerfile_dest)
     shutil.copyfile(run_script_src, run_script_dest)

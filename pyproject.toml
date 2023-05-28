@@ -39,6 +39,11 @@ Source = "https://github.com/monashrobotics/robot_containers"
 [tool.hatch.version]
 path = "src/roboco/__init__.py"
 
+[tool.hatch.build]
+include = [
+  "templates/"
+]
+
 [tool.hatch.envs.default]
 dependencies = [
   "coverage[toml]>=6.5",
@@ -147,7 +152,6 @@ source_pkgs = ["roboco", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/roboco/__about__.py",
 ]
 
 [tool.coverage.paths]
