@@ -86,21 +86,45 @@ Then remove the old container and start a new one:
 ./run.py
 ```
 
-## Available Containers
+## Available Dockerfile Templates
 
-| Robot / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
-| --- | :---: | :---: | :---: | :---: |
-| ABB YuMi | ✅ | ✅ | ❌ | ❌ |
-| Baxter | ❌ | ✅ | ❌ | ❌ |
-| Fetch | ❌ | ✅ | ❌ | ❌ |
-| Jackal | ❌ | ✅ | ✅ | ✅ |
-| Panda | ❌ | ✅ | ❌ | ❌ |
-| Ridgeback | ❌ | ✅ | ❌ | ❌ |
-| UR5 | ❌ | ✅ | ❌ | ✅ |
+Dockerfile templates are available for the following robot / ROS / Ubuntu combinations.
 
-| Driver / ROS Distro (Ubuntu OS) | ROS 1 Melodic (18.04) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
-| --- | :---: | :---: | :---: | :---: |
-| RealSense Camera | ✅ | ✅ | ✅ | ✅ |
-| Velodyne LiDAR | ✅ | ✅ | ✅ | ✅ |
-| Robotiq 2F-85 Gripper | ✅ | ✅ | ❌ | ❌ |
-| Robotiq FT-300 Force-Torque Sensor | ✅ | ✅ | ❌ | ❌ |
+| Robot / ROS Distro (Ubuntu OS) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| --- | :---: | :---: | :---: |
+| ABB YuMi | WIP | ❌ | ❌ |
+| Baxter | WIP | ❌ | ❌ |
+| Fetch | WIP | ❌ | ❌ |
+| Jackal | WIP | WIP | WIP |
+| Panda | WIP | ❌ | ❌ |
+| Ridgeback | WIP | ❌ | ❌ |
+| UR5 | ✅ | ❌ | WIP |
+
+Generic ROS 1 and ROS 2 Dockerfile templates for the following distributions are also available:
+
+- ROS 1 Kinetic (16.04)
+- ROS 1 Melodic (18.04)
+- ROS 1 Noetic (20.04)
+
+- ROS 2 Foxy (20.04)
+- ROS 2 Galactic (20.04)
+- ROS 2 Humble (22.04)
+
+## Hardware Drivers
+
+Snippets are available for these hardware drivers and ROS distro combinations:
+
+| Driver / ROS Distro (Ubuntu OS) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| --- | :---: | :---: | :---: |
+| RealSense Camera | WIP | WIP | WIP |
+| Velodyne LiDAR | WIP | WIP | WIP |
+| Robotiq 2F-85 Gripper | WIP | ❌ | ❌ |
+| Robotiq FT-300 Force-Torque Sensor | WIP | ❌ | ❌ |
+
+## Software Snippets
+
+Snippets are available for the following software packages:
+
+| Software | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
+| --- | :---: | :---: | :---: |
+| pytorch | WIP | WIP | WIP |
