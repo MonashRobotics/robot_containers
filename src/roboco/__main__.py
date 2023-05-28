@@ -43,6 +43,7 @@ def main():
     elif args.command == "snippet":
         snippet()
 
+
 def init():
     if os.path.exists("run.py") or os.path.exists("Dockerfile"):
         warn_message = "Warning: run.py and/or Dockerfile already exist(s) in this directory."
@@ -117,8 +118,10 @@ def init():
     """
     )
 
+
 def snippet():
     color_print([(yellow, "Snippets not implemented yet.")])
+
 
 if __name__ == "__main__":
     main()
