@@ -21,10 +21,14 @@ Finally, it includes `roboco`, a script for generating a new project from the in
   * [Requirements](#requirements)
   * [Installation](#installation)
   * [Usage](#usage)
-    * [Creating a new project](#creating-a-new-project)
+    * [Adding a container to your project](#adding-a-container-to-your-project)
     * [Running the container](#running-the-container)
     * [Customising the container](#customising-the-container)
-* [Available containers](#available-containers)
+* [Available Dockerfile Templates](#available-dockerfile-templates)
+  * [Hardware Drivers](#hardware-drivers)
+  * [Software Snippets](#software-snippets)
+* [Contributing](#contributing)
+* [Troubleshooting](#troubleshooting)
 
 ## Requirements
 
@@ -56,7 +60,7 @@ pip install .
 ```
 
 ## Usage
-### Creating a new project
+### Adding a container to your project
 ```
 roboco init
 ```
@@ -110,7 +114,7 @@ Generic ROS 1 and ROS 2 Dockerfile templates for the following distributions are
 - ROS 2 Galactic (20.04)
 - ROS 2 Humble (22.04)
 
-## Hardware Drivers
+### Hardware Drivers
 
 Snippets are available for these hardware drivers and ROS distro combinations:
 
@@ -121,10 +125,17 @@ Snippets are available for these hardware drivers and ROS distro combinations:
 | Robotiq 2F-85 Gripper | WIP | ❌ | ❌ |
 | Robotiq FT-300 Force-Torque Sensor | WIP | ❌ | ❌ |
 
-## Software Snippets
+### Software Snippets
 
 Snippets are available for the following software packages:
 
 | Software | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
 | --- | :---: | :---: | :---: |
 | pytorch | WIP | WIP | WIP |
+
+## Contributing
+If there's a robot, or hardware driver that you'd like to see supported, please open an issue or pull request.
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Troubleshooting
+See [docs/trouble.md](docs/trouble.md)
