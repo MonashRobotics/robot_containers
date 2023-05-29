@@ -12,7 +12,7 @@ It also includes a python script `run.py` that wraps the `docker` command to ena
 
 Finally, it includes `roboco`, a script for generating a new project from the included Dockerfiles.
 
-[![CI - Test](https://github.com/monashrobotics/robot_containers/actions/workflows/test.yml/badge.svg)](https://github.com/monashrobotics/robot_containers/actions/workflows/test.yml)
+[![CI - Test](https://github.com/monashrobotics/robot_containers/actions/workflows/ci.yml/badge.svg)](https://github.com/monashrobotics/robot_containers/actions/workflows/ci.yml)
 [![CI - Docker Images](https://github.com/monashrobotics/robot_containers/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/monashrobotics/robot_containers/actions/workflows/docker-publish.yml)
 [![linting - Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://github.com/charliermarsh/ruff) 
 [![code style - Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) 
