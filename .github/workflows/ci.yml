@@ -19,7 +19,7 @@ jobs:
           pip install hatch
       - name: Run linting
         run: |
-          hatch run lint
+          hatch run lint:all
       - name: Run tests
         run: |
           hatch run test
