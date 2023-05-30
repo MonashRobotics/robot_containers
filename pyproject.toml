@@ -72,9 +72,11 @@ dependencies = [
   "black>=23.1.0",
   "mypy>=1.0.0",
   "ruff>=0.0.243",
+  "inquirerpy~=0.3.4",
+  "typing_extensions~=4.6.2",
 ]
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:src/roboco tests}"
+typing = "mypy --install-types --non-interactive --check-untyped-defs {args:src/roboco}"
 style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",
