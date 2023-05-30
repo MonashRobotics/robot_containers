@@ -1,7 +1,12 @@
 # ruff: noqa: T201
 import os
 import shutil
-from importlib.resources import files
+try:
+    # Python < 3.9
+    import importlib_resources as ilr
+except ImportError:
+    # Python >= 3.9
+    import importlib.resources as ilr
 from pathlib import Path
 
 from roboco import __version__
@@ -11,7 +16,7 @@ from roboco.configurations import ProjectConfiguration, realsense_camera, ur5
 def generate_from_template(configuration: ProjectConfiguration):
     dockerfile_template = f"{configuration.robot.key}/Dockerfile.{configuration.ros_distro}"
     print(f"Generating from {dockerfile_template}")
-    package_dir = files("roboco")
+    package_dir = ilr.files("roboco")
     run_script_dest = "./run.py"
     dockerfile_dest = "./Dockerfile"
     run_script_src = f"{package_dir}/run.py"

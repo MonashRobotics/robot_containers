@@ -142,4 +142,4 @@ If there's a robot, or hardware driver that you'd like to see supported, please 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Troubleshooting
-See [docs/trouble.md](docs/trouble.md)
+See [docs/troubleshooting.md](docs/troubleshooting.md)

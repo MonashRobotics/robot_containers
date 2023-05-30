@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Literal
+
+from typing_extensions import Literal
 
 ROSDistro = Literal["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"]
 

@@ -26,6 +26,8 @@ classifiers = [
 ]
 dependencies = [
   "inquirerpy~=0.3.4",
+  "typing_extensions~=4.6.2",
+  "importlib-resources==3.0.0;python_version<'3.9'",
 ]
 
 [project.scripts]
