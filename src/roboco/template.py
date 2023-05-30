@@ -4,7 +4,7 @@ import shutil
 
 try:
     # Python < 3.9
-    import importlib_resources as ilr
+    import importlib_resources as ilr  # type: ignore
 except ImportError:
     # Python >= 3.9
     import importlib.resources as ilr
