@@ -13,7 +13,7 @@ DOCKERFILE = "./Dockerfile"
 BUILD_CONTEXT = "."
 
 
-def build_image(image_name: str, dockerfile: str, build_context: str) -> bool:
+def build_image(image_name: str, dockerfile: str, build_context: Path) -> bool:
     """
     Build an image from the supplied dockerfile in the given context.
 
@@ -169,7 +169,7 @@ def main(args: argparse.Namespace):
 
     if args.action == "run" or args.action is None:
         if not image_exists(PROJECT_NAME):
-            build_successful = build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
+            build_successful = build_image(PROJECT_NAME, DOCKERFILE, Path(BUILD_CONTEXT))
             if not build_successful:
                 sys.exit(1)
         if not container_exists(PROJECT_NAME):
@@ -181,7 +181,7 @@ def main(args: argparse.Namespace):
             if not attach_successful:
                 sys.exit(1)
     elif args.action == "build":
-        build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
+        build_image(PROJECT_NAME, DOCKERFILE, Path(BUILD_CONTEXT))
     elif args.action == "rm":
         remove_container(PROJECT_NAME)
     elif args.action == "rmi":
