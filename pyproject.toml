@@ -41,10 +41,6 @@ Source = "https://github.com/monashrobotics/robot_containers"
 [tool.hatch.version]
 path = "src/roboco/__init__.py"
 
-[tool.hatch.build.targets.wheel.force-include]
-"./templates" = "roboco/templates"
-"./run.py" = "roboco/run.py"
-
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -76,7 +72,7 @@ dependencies = [
   "typing_extensions~=4.6.2",
 ]
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive --check-untyped-defs {args:src/roboco}"
+typing = "mypy --install-types --non-interactive --check-untyped-defs {args:src/roboco tests}"
 style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",

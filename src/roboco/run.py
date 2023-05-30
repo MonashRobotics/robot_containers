@@ -13,18 +13,25 @@ DOCKERFILE = "./Dockerfile"
 BUILD_CONTEXT = "."
 
 
-def build_image(image_name: str, dockerfile: str, build_context: str):
-    """Build an image from the supplied dockerfile in the given context."""
+def build_image(image_name: str, dockerfile: str, build_context: str) -> bool:
+    """
+    Build an image from the supplied dockerfile in the given context.
+
+    Returns True if the build was successful, False otherwise.
+    """
     dockerfile_exists = Path(dockerfile).exists()
+    log = logging.getLogger()
     if not dockerfile_exists:
         log.error(f"Error: {dockerfile} does not exist.")
         sys.exit()
     build_command = f"docker build {build_context} -f {dockerfile} -t {image_name}"
     log.debug(build_command)
-    subprocess.run(build_command, shell=True)
+    result = subprocess.run(build_command, shell=True)
+    success = result.returncode == 0
+    return success
 
 
-def create_container(image_name: str, container_name: str):
+def create_container(image_name: str, container_name: str) -> bool:
     """
     Use 'docker run' to create a container.
 
@@ -39,6 +46,8 @@ def create_container(image_name: str, container_name: str):
     upstream docker images.
     - The current working directory is shared as a volume inside the container.
     - The terminal is attached to the container.
+
+    Returns True if the container was created successfully, False otherwise.
     """
     run_command = f"""docker run -it \
         -e DISPLAY \
@@ -55,17 +64,23 @@ def create_container(image_name: str, container_name: str):
         -it {image_name} \
         bash
     """
+    log = logging.getLogger()
     log.info(run_command)
-    subprocess.run(run_command, shell=True)
+    result = subprocess.run(run_command, shell=True)
+    success = result.returncode == 0
+    return success
 
 
-def attach_to_container(container_name: str):
+def attach_to_container(container_name: str) -> bool:
     """
     Attach the terminal to an existing container, starting it if it is currently in
     stopped state.
+
+    Returns True if the container was attached successfully, False otherwise.
     """
     # Allow container to create GUI windows on the host's X server
     xhost_command = "xhost + >> /dev/null"
+    log = logging.getLogger()
     log.info(xhost_command)
     subprocess.run(xhost_command, shell=True)
 
@@ -73,18 +88,23 @@ def attach_to_container(container_name: str):
         # Start and attach to the container
         start_command = f"docker start -ia {container_name}"
         log.info(start_command)
-        subprocess.run(start_command, shell=True)
+        result = subprocess.run(start_command, shell=True)
+        success = result.returncode == 0
+        return success
     else:
         # Attach a new terminal into the running container
         program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
         attach_command = f"docker exec -it {container_name} {program_to_run}"
         log.info(attach_command)
-        subprocess.run(attach_command, shell=True)
+        result = subprocess.run(attach_command, shell=True)
+        success = result.returncode == 0
+        return success
 
 
 def remove_container(container_name: str):
     """Delete the container."""
     remove_container_command = f"docker rm -f {container_name}"
+    log = logging.getLogger()
     log.info(remove_container_command)
     subprocess.run(remove_container_command, shell=True)
 
@@ -92,12 +112,14 @@ def remove_container(container_name: str):
 def remove_image(image_name: str):
     """Delete the image."""
     remove_image_command = f"docker rmi -f {image_name}"
+    log = logging.getLogger()
     log.info(remove_image_command)
     subprocess.run(remove_image_command, shell=True)
 
 
 def command_returns_empty(command: str) -> bool:
     """Run the command and return whether or not the output was empty."""
+    log = logging.getLogger()
     log.debug(command)
     output = subprocess.run(
         command, stdout=subprocess.PIPE, shell=True
@@ -129,6 +151,7 @@ def container_is_running(container_name: str) -> bool:
 
 def main(args: argparse.Namespace):
     # Set up console printing
+    log = logging.getLogger()
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     if args.verbose:
         log.setLevel(logging.DEBUG)
@@ -146,11 +169,17 @@ def main(args: argparse.Namespace):
 
     if args.action == "run" or args.action is None:
         if not image_exists(PROJECT_NAME):
-            build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
+            build_successful = build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
+            if not build_successful:
+                sys.exit(1)
         if not container_exists(PROJECT_NAME):
-            create_container(PROJECT_NAME, PROJECT_NAME)
+            create_successful = create_container(PROJECT_NAME, PROJECT_NAME)
+            if not create_successful:
+                sys.exit(1)
         else:
-            attach_to_container(PROJECT_NAME)
+            attach_successful = attach_to_container(PROJECT_NAME)
+            if not attach_successful:
+                sys.exit(1)
     elif args.action == "build":
         build_image(PROJECT_NAME, DOCKERFILE, BUILD_CONTEXT)
     elif args.action == "rm":
@@ -160,7 +189,6 @@ def main(args: argparse.Namespace):
 
 
 if __name__ == "__main__":
-    log = logging.getLogger()
     parser = argparse.ArgumentParser(
         description="Runs docker containers",
         formatter_class=argparse.RawDescriptionHelpFormatter,

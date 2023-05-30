@@ -108,7 +108,7 @@ def init():
 
     print("\nCreating project...")
 
-    generate_from_template(configuration)
+    generate_from_template(configuration, "./")
 
     color_print([(green, "\nDone. "), ("", "Now run:")])
     print(
