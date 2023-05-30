@@ -1,6 +1,7 @@
 # ruff: noqa: T201
 import os
 import shutil
+
 try:
     # Python < 3.9
     import importlib_resources as ilr
