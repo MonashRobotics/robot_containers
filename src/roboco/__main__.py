@@ -3,6 +3,7 @@
 import argparse
 import os
 import sys
+from pathlib import Path
 
 from InquirerPy import get_style, inquirer
 from InquirerPy.base.control import Choice
@@ -108,7 +109,7 @@ def init():
 
     print("\nCreating project...")
 
-    generate_from_template(configuration)
+    generate_from_template(configuration, Path("./"))
 
     color_print([(green, "\nDone. "), ("", "Now run:")])
     print(
