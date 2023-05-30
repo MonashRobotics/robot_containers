@@ -11,7 +11,7 @@ except ImportError:
 from pathlib import Path
 
 from roboco import __version__
-from roboco.configurations import ProjectConfiguration, realsense_camera, ur5
+from roboco.configurations import ProjectConfiguration
 
 
 def generate_from_template(configuration: ProjectConfiguration, destination: Path):
@@ -47,8 +47,3 @@ def add_to_beginning_of_file(file: Path, new: str):
     with open(file, "w") as f:
         f.write(new)
         f.write(old_text)
-
-
-if __name__ == "__main__":
-    test_config = ProjectConfiguration("my_test_project", ur5, "noetic", [realsense_camera])
-    generate_from_template(test_config)
