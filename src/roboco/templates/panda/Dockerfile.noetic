@@ -1,4 +1,4 @@
-FROM ros:noetic
+FROM osrf/ros:noetic-desktop-full
 
 # Follows installation instructions from https://frankaemika.github.io/docs/installation_linux.html
 RUN apt-get update && apt-get install -y \

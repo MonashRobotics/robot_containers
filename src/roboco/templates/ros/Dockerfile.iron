@@ -1,4 +1,4 @@
-FROM osrf/ros:galactic-desktop
+FROM osrf/ros:iron-desktop-full
 
 # Install system dependencies
 # RUN apt-get update && apt-get install -y \
