@@ -1,4 +1,4 @@
-FROM ros:foxy
+FROM osrf/ros:foxy-desktop-full
 
 # Install system dependencies
 # RUN apt-get update && apt-get install -y \
