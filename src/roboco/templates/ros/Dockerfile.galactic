@@ -1,4 +1,4 @@
-FROM osrf/ros:galactic-desktop-full
+FROM osrf/ros:galactic-desktop
 
 # Install system dependencies
 # RUN apt-get update && apt-get install -y \
