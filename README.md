@@ -117,6 +117,7 @@ Generic ROS 1 and ROS 2 Dockerfile templates for the following distributions are
 - ROS 2 Foxy (20.04)
 - ROS 2 Galactic (20.04)
 - ROS 2 Humble (22.04)
+- ROS 2 Iron (22.04)
 
 ### Hardware Drivers
 
