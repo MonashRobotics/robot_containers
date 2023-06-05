@@ -13,11 +13,11 @@ DOCKERFILE = "./Dockerfile"
 BUILD_CONTEXT = "."
 
 
-def build_image(image_name: str, dockerfile: str, build_context: Path) -> bool:
+def build_image(image_name: str, dockerfile: str, build_context: Path):
     """
     Build an image from the supplied dockerfile in the given context.
 
-    Returns True if the build was successful, False otherwise.
+    Raises RuntimeError if the build fails.
     """
     dockerfile_exists = Path(dockerfile).exists()
     log = logging.getLogger()
@@ -28,10 +28,12 @@ def build_image(image_name: str, dockerfile: str, build_context: Path) -> bool:
     log.debug(build_command)
     result = subprocess.run(build_command, shell=True)
     success = result.returncode == 0
-    return success
+    if not success:
+        msg = "Build failed"
+        raise RuntimeError(msg)
 
 
-def create_container(image_name: str, container_name: str) -> bool:
+def create_container(image_name: str, container_name: str):
     """
     Use 'docker run' to create a container.
 
@@ -47,7 +49,7 @@ def create_container(image_name: str, container_name: str) -> bool:
     - The current working directory is shared as a volume inside the container.
     - The terminal is attached to the container.
 
-    Returns True if the container was created successfully, False otherwise.
+    Raises RuntimeError if the container fails to start.
     """
     run_command = f"""docker run -it \
         -e DISPLAY \
@@ -68,15 +70,17 @@ def create_container(image_name: str, container_name: str) -> bool:
     log.info(run_command)
     result = subprocess.run(run_command, shell=True)
     success = result.returncode == 0
-    return success
+    if not success:
+        msg = "Creation of container failed"
+        raise RuntimeError(msg)
 
 
-def attach_to_container(container_name: str) -> bool:
+def attach_to_container(container_name: str):
     """
     Attach the terminal to an existing container, starting it if it is currently in
     stopped state.
 
-    Returns True if the container was attached successfully, False otherwise.
+    Raises RuntimeError if the container fails to start.
     """
     # Allow container to create GUI windows on the host's X server
     xhost_command = "xhost + >> /dev/null"
@@ -90,7 +94,9 @@ def attach_to_container(container_name: str) -> bool:
         log.info(start_command)
         result = subprocess.run(start_command, shell=True)
         success = result.returncode == 0
-        return success
+        if not success:
+            msg = "Starting container failed"
+            raise RuntimeError(msg)
     else:
         # Attach a new terminal into the running container
         program_to_run = "bash"  # you can edit this if you wish. e.g. bash -c ~/project/tmux_start.sh
@@ -98,7 +104,9 @@ def attach_to_container(container_name: str) -> bool:
         log.info(attach_command)
         result = subprocess.run(attach_command, shell=True)
         success = result.returncode == 0
-        return success
+        if not success:
+            msg = "Attaching to container failed"
+            raise RuntimeError(msg)
 
 
 def remove_container(container_name: str):
@@ -168,18 +176,16 @@ def main(args: argparse.Namespace):
         sys.exit()
 
     if args.action == "run" or args.action is None:
-        if not image_exists(PROJECT_NAME):
-            build_successful = build_image(PROJECT_NAME, DOCKERFILE, Path(BUILD_CONTEXT))
-            if not build_successful:
-                sys.exit(1)
-        if not container_exists(PROJECT_NAME):
-            create_successful = create_container(PROJECT_NAME, PROJECT_NAME)
-            if not create_successful:
-                sys.exit(1)
-        else:
-            attach_successful = attach_to_container(PROJECT_NAME)
-            if not attach_successful:
-                sys.exit(1)
+        try:
+            if not image_exists(PROJECT_NAME):
+                build_image(PROJECT_NAME, DOCKERFILE, Path(BUILD_CONTEXT))
+            if not container_exists(PROJECT_NAME):
+                create_container(PROJECT_NAME, PROJECT_NAME)
+            else:
+                attach_to_container(PROJECT_NAME)
+        except RuntimeError as e:
+            log.error(e)
+            sys.exit(1)
     elif args.action == "build":
         build_image(PROJECT_NAME, DOCKERFILE, Path(BUILD_CONTEXT))
     elif args.action == "rm":
