@@ -9,12 +9,12 @@ robot_containers
 ├── docs                            # Documentation
 │   └── troubleshooting.md          # Troubleshooting guide
 ├── pyproject.toml                  # Python package configuration
-├── run.py                          # Script to build and run the container
 ├── src                             # Python package
 │   └── roboco
 │       ├── __init__.py             # Package entrypoint
 │       ├── __main__.py             # Templating script entrypoint
 │       ├── configurations.py       # Configuration options for each robot
+│       ├── run.py                  # Script to build and run the container
 │       ├── template.py             # Templating script
 │       └── templates               # Dockerfile templates
 │           ├── ...
