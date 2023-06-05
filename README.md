@@ -36,6 +36,10 @@ Finally, it includes `roboco`, a script for generating a new project from the in
 
 ## Requirements
 
+### Python
+- `run.py` is compatible with python 3.6 and above. This is the key requirement for running the containers.
+- `roboco`, the templating script, is compatible only with python 3.7 and above. See [docs/old_python.md](docs/old_python.md) for instructions if you are running python <= 3.6.
+
 ### Docker
 - Tested with Docker 20.10.23. 
 
