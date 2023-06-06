@@ -100,7 +100,7 @@ Then remove the old container and start a new one:
 
 ## Available Dockerfile Templates
 
-Dockerfile templates are available for the following robot / ROS / Ubuntu combinations.
+[Dockerfile templates](src/roboco/templates) are available for the following robot / ROS / Ubuntu combinations.
 
 | Robot / ROS Distro (Ubuntu OS) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
 | --- | :---: | :---: | :---: |
