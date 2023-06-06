@@ -108,7 +108,7 @@ Then remove the old container and start a new one:
 | [Baxter](src/roboco/templates/baxter/) | WIP | ❌ | ❌ |
 | [Fetch](src/roboco/templates/fetch/) | WIP | ❌ | ❌ |
 | [Jackal](src/roboco/templates/jackal/) | WIP | WIP | WIP |
-| [Panda](src/roboco/templates/panda/) | WIP | ❌ | ❌ |
+| [Panda](src/roboco/templates/panda/) | WIP | ❌ | WIP |
 | [Ridgeback](src/roboco/templates/ridgeback/) | WIP | ❌ | ❌ |
 | [UR5](src/roboco/templates/ur5/) | ✅ | ❌ | WIP |
 
