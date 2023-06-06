@@ -104,24 +104,24 @@ Then remove the old container and start a new one:
 
 | Robot / ROS Distro (Ubuntu OS) | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
 | --- | :---: | :---: | :---: |
-| ABB YuMi | WIP | ❌ | ❌ |
-| Baxter | WIP | ❌ | ❌ |
-| Fetch | WIP | ❌ | ❌ |
-| Jackal | WIP | WIP | WIP |
-| Panda | WIP | ❌ | ❌ |
-| Ridgeback | WIP | ❌ | ❌ |
-| UR5 | ✅ | ❌ | WIP |
+| [ABB YuMi](src/roboco/templates/abb_yumi/) | WIP | ❌ | ❌ |
+| [Baxter](src/roboco/templates/baxter/) | WIP | ❌ | ❌ |
+| [Fetch](src/roboco/templates/fetch/) | WIP | ❌ | ❌ |
+| [Jackal](src/roboco/templates/jackal/) | WIP | WIP | WIP |
+| [Panda](src/roboco/templates/panda/) | WIP | ❌ | ❌ |
+| [Ridgeback](src/roboco/templates/ridgeback/) | WIP | ❌ | ❌ |
+| [UR5](src/roboco/templates/ur5/) | ✅ | ❌ | WIP |
 
 Generic ROS 1 and ROS 2 Dockerfile templates for the following distributions are also available:
 
-- ROS 1 Kinetic (16.04)
-- ROS 1 Melodic (18.04)
-- ROS 1 Noetic (20.04)
+- [ROS 1 Kinetic (16.04)](src/roboco/templates/ros/Dockerfile.kinetic)
+- [ROS 1 Melodic (18.04)](src/roboco/templates/ros/Dockerfile.melodic)
+- [ROS 1 Noetic (20.04)](src/roboco/templates/ros/Dockerfile.noetic)
 
-- ROS 2 Foxy (20.04)
-- ROS 2 Galactic (20.04)
-- ROS 2 Humble (22.04)
-- ROS 2 Iron (22.04)
+- [ROS 2 Foxy (20.04)](src/roboco/templates/ros/Dockerfile.foxy)
+- [ROS 2 Galactic (20.04)](src/roboco/templates/ros/Dockerfile.galactic)
+- [ROS 2 Humble (22.04)](src/roboco/templates/ros/Dockerfile.humble)
+- [ROS 2 Iron (22.04)](src/roboco/templates/ros/Dockerfile.iron)
 
 ### Hardware Drivers
 
