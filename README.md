@@ -141,6 +141,7 @@ Snippets are available for the following software packages:
 | Software | ROS 1 Noetic (20.04) | ROS 2 Foxy (20.04) | ROS 2 Humble (22.04)
 | --- | :---: | :---: | :---: |
 | pytorch | WIP | WIP | WIP |
+| cuda | WIP | WIP | WIP |
 
 ## Contributing
 If there's a robot, or hardware driver that you'd like to see supported, please open an issue or pull request.
@@ -148,3 +149,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Troubleshooting
 See [docs/troubleshooting.md](docs/troubleshooting.md)
+
+## Credits
+
+This project draws inspiration from [rocker](https://github.com/osrf/rocker/tree/main), [ros-devel](https://github.com/Alabate/ros-devel), and [mcav_autonomy](https://github.com/Monash-Connected-Autonomous-Vehicle/mcav_autonomy).
