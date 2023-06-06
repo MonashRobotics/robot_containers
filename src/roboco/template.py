@@ -57,6 +57,7 @@ def add_to_beginning_of_file(file: Path, new: str):
         f.write(new)
         f.write(old_text)
 
+
 def concatenate_snippets(configuration: ProjectConfiguration) -> str:
     package_dir = ilr.files("roboco")
     snippets = ["# SNIPPETS_SECTION_START"]
@@ -92,13 +93,15 @@ def display_snippets(additional_options: list[HardwareOption]):
             preamble_src = f"{package_dir}/snippets/Dockerfile.{addition.key}.preamble"
             with open(preamble_src) as f:
                 preamble_contents = f.read()
-                color_print([(yellow, """\nAdd the following preamble to the top of your Dockerfile
-(marked as PREAMBLE_SECTION_START/END):\n""")])
+                msg = """\nAdd the following preamble to the top of your Dockerfile
+(marked as PREAMBLE_SECTION_START/END):\n"""
+                color_print([(yellow, msg)])
                 color_print([(orange, preamble_contents)])
 
         snippet_src = f"{package_dir}/snippets/Dockerfile.{addition.key}.snippet"
         with open(snippet_src) as f:
             snippet_contents = f.read()
-            color_print([(yellow, """\nAdd the following snippet to the middle of your Dockerfile
-(marked as SNIPPETS_SECTION_START/END):\n""")])
+            msg = """\nAdd the following snippet to the middle of your Dockerfile
+(marked as SNIPPETS_SECTION_START/END):\n"""
+            color_print([(yellow, msg)])
             color_print([(orange, snippet_contents)])

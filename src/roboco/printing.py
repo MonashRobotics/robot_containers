@@ -1,4 +1,3 @@
-
 from InquirerPy import get_style
 
 green = "#00ffa1"

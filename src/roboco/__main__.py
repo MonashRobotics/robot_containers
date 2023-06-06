@@ -112,9 +112,7 @@ def init():
 
 
 def snippet():
-    hardware_choices = [
-        Choice(key, option.name) for (key, option) in hardware_options.items()
-    ]
+    hardware_choices = [Choice(key, option.name) for (key, option) in hardware_options.items()]
     hardware_keys = inquirer.checkbox(
         "Additional hardware:",
         instruction="(space to toggle selection)",

@@ -53,12 +53,7 @@ ur5 = Robot(
     ["melodic", "noetic", "humble"],
     [realsense_camera, robotiq_2f85_gripper, robotiq_ft300_forcetorque, papillarray],
 )
-other = Robot(
-    "ros",
-    "Other/None",
-    ["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"],
-    [nvidia, pytorch]
-)
+other = Robot("ros", "Other/None", ["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"], [nvidia, pytorch])
 
 robots = {
     "abb_yumi": abb_yumi,
