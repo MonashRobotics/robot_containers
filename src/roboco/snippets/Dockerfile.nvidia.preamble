@@ -1,0 +1,1 @@
+FROM nvidia/opengl:1.0-glvnd-devel-ubuntu18.04 as glvnd

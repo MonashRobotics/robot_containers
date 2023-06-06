@@ -1,3 +1,6 @@
+# PREAMBLE_SECTION_START
+# PREAMBLE_SECTION_END
+
 FROM osrf/ros:humble-desktop-full
 
 # Install system dependencies
@@ -13,6 +16,9 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# SNIPPETS_SECTION_START
+# SNIPPETS_SECTION_END
 
 # Create and enter a ros workspace
 WORKDIR /home/${USERNAME}/ros_ws/src

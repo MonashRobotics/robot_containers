@@ -5,23 +5,14 @@ import os
 import sys
 from pathlib import Path
 
-from InquirerPy import get_style, inquirer
+from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.utils import color_print
 
 from roboco import __version__
 from roboco.configurations import ProjectConfiguration, hardware_options, robots
-from roboco.template import generate_from_template
-
-green = "#00ffa1"
-red = "#ff5858"
-yellow = "#e5e512"
-blue = "#61afef"
-style = get_style(
-    {"input": blue, "questionmark": yellow, "answermark": f"{green} bold"},
-    style_override=False,
-)
-tick = "\u2714"
+from roboco.printing import green, red, style, tick, yellow
+from roboco.template import display_snippets, generate_from_template
 
 
 def main():
@@ -121,7 +112,21 @@ def init():
 
 
 def snippet():
-    color_print([(yellow, "Snippets not implemented yet.")])
+    hardware_choices = [
+        Choice(key, option.name) for (key, option) in hardware_options.items()
+    ]
+    hardware_keys = inquirer.checkbox(
+        "Additional hardware:",
+        instruction="(space to toggle selection)",
+        choices=hardware_choices,
+        style=style,
+        amark=tick,
+    ).execute()
+    hardware = [hardware_options[hardware_key] for hardware_key in hardware_keys]
+    if len(hardware) == 0:
+        print("No additions selected. Use space to select")
+
+    display_snippets(hardware)
 
 
 if __name__ == "__main__":

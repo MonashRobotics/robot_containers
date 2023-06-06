@@ -12,6 +12,7 @@ class HardwareOption:
     key: str  # a unique identifier for the hardware option
     name: str
     compatible_ros_distros: list[ROSDistro]
+    has_preamble: bool = False
 
 
 @dataclass
@@ -36,6 +37,8 @@ robotiq_ft300_forcetorque = HardwareOption(
     "robotiq_ft300_forcetorque", "Robotiq FT-300 Force-Torque Sensor", ["melodic", "noetic"]
 )
 papillarray = HardwareOption("papillarray", "Contactile Papillarray Tactile Sensor", ["melodic", "noetic"])
+nvidia = HardwareOption("nvidia", "NVIDIA GPU Drivers", ["noetic", "foxy", "humble"], has_preamble=True)
+pytorch = HardwareOption("pytorch", "Pytorch", ["noetic", "foxy", "humble"])
 
 
 abb_yumi = Robot("abb_yumi", "ABB YuMi", ["melodic", "noetic"], [])
@@ -50,7 +53,12 @@ ur5 = Robot(
     ["melodic", "noetic", "humble"],
     [realsense_camera, robotiq_2f85_gripper, robotiq_ft300_forcetorque, papillarray],
 )
-other = Robot("ros", "Other/None", ["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"], [])
+other = Robot(
+    "ros",
+    "Other/None",
+    ["kinetic", "melodic", "noetic", "foxy", "galactic", "humble"],
+    [nvidia, pytorch]
+)
 
 robots = {
     "abb_yumi": abb_yumi,
@@ -68,4 +76,6 @@ hardware_options = {
     "robotiq_2f85_gripper": robotiq_2f85_gripper,
     "robotiq_ft300_forcetorque": robotiq_ft300_forcetorque,
     "papillarray": papillarray,
+    "nvidia": nvidia,
+    "pytorch": pytorch,
 }
