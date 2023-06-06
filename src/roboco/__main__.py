@@ -112,7 +112,8 @@ def init():
     generate_from_template(configuration, Path("./"))
 
     color_print([(green, "\nDone. "), ("", "Now run:")])
-    print("""
+    print(
+        """
         ./run.py
     """
     )
