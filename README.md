@@ -1,6 +1,6 @@
 
 # Robot Containers
-This repository contains Dockerfiles for building containers for [various robots](#available-containers).
+This repository contains Dockerfiles for building containers for [various robots](#available-dockerfile-templates).
 It also includes a python script `run.py` that wraps the `docker` command to enable:
 
 - building, starting and entering the container in one step
