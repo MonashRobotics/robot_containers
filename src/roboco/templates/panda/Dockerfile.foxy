@@ -1,13 +1,25 @@
-FROM osrf/ros:noetic-desktop-full
+FROM osrf/ros:foxy-desktop
 
 # Follows installation instructions from https://frankaemika.github.io/docs/installation_linux.html
 RUN apt-get update && apt-get install -y \
     git \
     # libfranka dependencies for building
     libpoco-dev libeigen3-dev \
-    # ros-noetic-franka-ros \
-    # ros-noetic-libfranka \
-    # ros-noetic-moveit-resources-panda-moveit-config \
+#     ros-${ROS_DISTRO}-franka-ros \
+#     ros-${ROS_DISTRO}-libfranka \
+#     ros-${ROS_DISTRO}-moveit-resources-panda-moveit-config \
+    ros-${ROS_DISTRO}-control-msgs \
+    ros-${ROS_DISTRO}-xacro \
+    ros-${ROS_DISTRO}-angles \
+    ros-${ROS_DISTRO}-ros2-control \
+    ros-${ROS_DISTRO}-realtime-tools \
+    ros-${ROS_DISTRO}-control-toolbox \
+    ros-${ROS_DISTRO}-moveit \
+    ros-${ROS_DISTRO}-ros2-controllers \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-ament-cmake-clang-format \
+    python3-colcon-common-extensions \
     && rm -rf /var/lib/apt/lists/*
 
 # Add non-root user
@@ -22,9 +34,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
 # Create and enter a ros workspace
 WORKDIR /home/${USERNAME}/ros_ws
 # Download source dependencies
-# can install libfranka from apt package instead once we update panda firmware
+RUN git clone --depth 1 https://github.com/frankaemika/franka_ros2.git src/franka_ros2
 RUN git clone --recursive --depth 1 --branch 0.8.0 https://github.com/frankaemika/libfranka src/libfranka
-RUN git clone --recursive --depth 1 --branch 0.9.1 https://github.com/frankaemika/franka_ros.git src/franka_ros
 
 # Build libfranka
 WORKDIR /home/${USERNAME}/ros_ws/src/libfranka/build
@@ -32,12 +43,10 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF .. && cmake --build . && 
 
 # Install dependencies using rosdep
 WORKDIR /home/${USERNAME}/ros_ws
-RUN apt-get update \
-    && rosdep update \
-    && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --rosdistro ${ROS_DISTRO} --ignore-src -r --default-yes --skip-keys libfranka \
-    && rm -rf /var/lib/apt/lists/*
-# Build franka_ros
-RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release -DFranka_DIR:PATH=/home/${USERNAME}/ros_ws/src/libfranka/build'
+# RUN apt-get update \
+#     && rosdep update \
+#     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Change to the non-root user and update file ownership
 RUN chown -R ${USERNAME} /home/${USERNAME}
@@ -48,4 +57,4 @@ RUN echo "export PS1='\[\e]0;\u@docker: \w\a\]${debian_chroot:+($debian_chroot)}
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 
 # Build source packages
-# RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release'
+RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release'

@@ -42,7 +42,7 @@ abb_yumi = Robot("abb_yumi", "ABB YuMi", ["melodic", "noetic"], [])
 baxter = Robot("baxter", "Baxter", ["kinetic", "noetic"], [])
 fetch = Robot("fetch", "Fetch", ["melodic", "noetic"], [])
 jackal = Robot("jackal", "Jackal", ["noetic", "foxy", "humble"], [realsense_camera])
-panda = Robot("panda", "Panda", ["melodic", "noetic"], [realsense_camera])
+panda = Robot("panda", "Panda", ["noetic", "foxy", "humble"], [realsense_camera])
 ridgeback = Robot("ridgeback", "Ridgeback", ["noetic"], [])
 ur5 = Robot(
     "ur5",
