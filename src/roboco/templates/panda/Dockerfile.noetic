@@ -20,29 +20,24 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Create and enter a ros workspace
-WORKDIR /home/${USERNAME}/ros_ws/src
+WORKDIR /home/${USERNAME}/ros_ws
 # Download source dependencies
 # can install libfranka from apt package instead once we update panda firmware
-RUN git clone --recursive --depth 1 --branch 0.8.0 https://github.com/frankaemika/libfranka
+RUN git clone --recursive --depth 1 --branch 0.8.0 https://github.com/frankaemika/libfranka src/libfranka
+RUN git clone --recursive --depth 1 --branch 0.9.1 https://github.com/frankaemika/franka_ros.git src/franka_ros
 
 # Build libfranka
 WORKDIR /home/${USERNAME}/ros_ws/src/libfranka/build
 RUN cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF .. && cmake --build . && cpack -G DEB && dpkg -i libfranka*.deb
-# Build franka_ros
+
+# Install dependencies using rosdep
 WORKDIR /home/${USERNAME}/ros_ws
-RUN git clone --recursive --depth 1 --branch 0.9.1 https://github.com/frankaemika/franka_ros.git src/franka_ros
 RUN apt-get update \
     && rosdep update \
     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --rosdistro ${ROS_DISTRO} --ignore-src -r --default-yes --skip-keys libfranka \
     && rm -rf /var/lib/apt/lists/*
+# Build franka_ros
 RUN /bin/bash -c '. /opt/ros/$ROS_DISTRO/setup.bash; cd /home/${USERNAME}/ros_ws; catkin_make -DCMAKE_BUILD_TYPE=Release -DFranka_DIR:PATH=/home/${USERNAME}/ros_ws/src/libfranka/build'
-
-# Install dependencies using rosdep
-WORKDIR /home/${USERNAME}/ros_ws
-# RUN apt-get update \
-#     && rosdep update \
-#     && DEBIAN_FRONTEND=noninteractive rosdep install --from-paths src --ignore-src -r --default-yes \
-#     && rm -rf /var/lib/apt/lists/*
 
 # Change to the non-root user and update file ownership
 RUN chown -R ${USERNAME} /home/${USERNAME}
