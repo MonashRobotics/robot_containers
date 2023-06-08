@@ -50,8 +50,9 @@ Finally, it includes `roboco`, a script for generating a new project from the in
 ### nvidia-docker2 (for GPU support, optional)
 - Install nvidia-docker2 by following https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#setting-up-nvidia-container-toolkit
 
-### VSCode - Dev Containers Extension (Optional)
-- Tested with v0.292.0 of Dev Containers extension https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+### VSCode Extensions (Optional)
+- Docker extension - tested with v1.25.1
+- Dev Containers extension https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers - tested with v0.292.0
 
 ## Installation
 
