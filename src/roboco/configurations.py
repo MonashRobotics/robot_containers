@@ -28,6 +28,7 @@ class ProjectConfiguration:
     robot: Robot
     ros_distro: ROSDistro
     hardware: list[HardwareOption]
+    base_image: str
 
 
 realsense_camera = HardwareOption("realsense_camera", "RealSense Camera", ["melodic", "noetic", "foxy", "humble"])

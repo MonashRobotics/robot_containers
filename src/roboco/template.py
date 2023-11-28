@@ -28,6 +28,12 @@ def generate_from_template(configuration: ProjectConfiguration, destination: Pat
     shutil.copyfile(run_script_src, run_script_dest)
     os.chmod(run_script_dest, 0o755)  # noqa: S103
 
+    base_ros_image = f"osrf/ros:{configuration.ros_distro}-desktop-full"
+    if configuration.base_image != base_ros_image:
+        with open(f"{package_dir}/templates/ros/DockerfileAuto") as f:
+            new_template = f"FROM {configuration.base_image}\n" + f.read()
+            replace_string_in_file(dockerfile_dest, f"FROM {base_ros_image}", new_template)
+
     replace_string_in_file(Path(run_script_dest), "please_change_project_name", configuration.name)
     add_to_beginning_of_file(Path(dockerfile_dest), f"# Generated using roboco version {__version__}\n")
 

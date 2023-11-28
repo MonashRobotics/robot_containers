@@ -9,6 +9,7 @@ from InquirerPy import get_style, inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.utils import color_print
 
+from roboco.utils import check_docker_image_exists
 from roboco import __version__
 from roboco.configurations import ProjectConfiguration, hardware_options, robots
 from roboco.template import generate_from_template
@@ -74,6 +75,17 @@ def init():
         "ROS version:", choices=robot_choice.compatible_ros_distros, style=style, amark=tick
     ).execute()
 
+    ros_image = f"osrf/ros:{ros_distro}-desktop-full"
+    base_image: str = inquirer.text(
+        message=f"Choose a base image (leave blank for: {ros_image})", style=style, amark=tick
+    ).execute()
+    base_image = base_image if len(base_image) != 0 else ros_image
+
+    if not check_docker_image_exists(base_image):
+        error_message = f"Error: Please enter a valid docker image. {base_image} was not found"
+        color_print([(red, error_message)])
+        sys.exit()
+
     hardware = []
 
     if len(robot_choice.compatible_hardware) > 0:
@@ -105,7 +117,7 @@ def init():
         print("Cancelled.")
         sys.exit()
 
-    configuration = ProjectConfiguration(name, robot_choice, ros_distro, hardware)
+    configuration = ProjectConfiguration(name, robot_choice, ros_distro, hardware, base_image)
 
     print("\nCreating project...")
 
